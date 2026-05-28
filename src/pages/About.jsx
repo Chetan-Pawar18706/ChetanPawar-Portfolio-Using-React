@@ -57,23 +57,33 @@ const AboutMe = () => {
           About Me
         </h2>
 
-        <p
-          style={{
-            fontSize: "1.1rem",
-            color: "rgba(255,255,255,0.85)",
-            marginBottom: "1rem",
-          }}
-        >
-          Hi, I’m <strong>Chetan Sitaram Pawar</strong>, a detail-oriented BCA student with a strong foundation in Data Structures, DBMS, Computer Networks, and Operating Systems.
-        </p>
+        {paragraphs.length > 0 ? (
+          paragraphs.map((item, index) => (
+            <p key={`${item._id || item.title}-${index}`} style={{ fontSize: "1.1rem", color: "rgba(255,255,255,0.8)", marginBottom: "1rem" }}>
+              {item.text || item.title}
+            </p>
+          ))
+        ) : (
+          <>
+            <p
+              style={{
+                fontSize: "1.1rem",
+                color: "rgba(255,255,255,0.85)",
+                marginBottom: "1rem",
+              }}
+            >
+              Hi, Im <strong>Chetan Sitaram Pawar</strong>, a detail-oriented BCA student with a strong foundation in Data Structures, DBMS, Computer Networks, and Operating Systems.
+            </p>
 
-        <p style={{ fontSize: "1.1rem", color: "rgba(255,255,255,0.8)" }}>
-          I build responsive frontend interfaces with <strong>React.js, JavaScript, HTML, and CSS</strong>, and I also work with backend technologies including <strong>PHP and MySQL</strong>. I enjoy creating CRUD-based web applications with clean navigation, secure role-based access, and practical user workflows.
-        </p>
+            <p style={{ fontSize: "1.1rem", color: "rgba(255,255,255,0.8)" }}>
+              I build responsive frontend interfaces with <strong>React.js, JavaScript, HTML, and CSS</strong>, and I also work with backend technologies including <strong>PHP and MySQL</strong>. I enjoy creating CRUD-based web applications with clean navigation, secure role-based access, and practical user workflows.
+            </p>
 
-        <p style={{ fontSize: "1.1rem", color: "rgba(255,255,255,0.8)" }}>
-          I am eager to start my career as a <strong>Software Developer Intern</strong> and contribute to real-world projects while continuing to improve in web and app development.
-        </p>
+            <p style={{ fontSize: "1.1rem", color: "rgba(255,255,255,0.8)" }}>
+              I am eager to start my career as a <strong>Software Developer Intern</strong> and contribute to real-world projects while continuing to improve in web and app development.
+            </p>
+          </>
+        )}
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -124,7 +134,7 @@ const AboutMe = () => {
                   Bachelor of Computer Applications (BCA)
                 </h4>
                 <p style={{ color: "rgba(255,255,255,0.85)", marginBottom: "0.2rem" }}>
-                  <strong>Naran Lala College of Professional & Applied Sciences</strong> — Navsari
+                  <strong>Naran Lala College of Professional & Applied Sciences</strong> ï¿½ Navsari
                 </p>
                 <p style={{ color: "rgba(255,255,255,0.7)" }}>
                   Veer Narmad South Gujarat University, Surat, Gujarat
@@ -155,7 +165,7 @@ const AboutMe = () => {
                   Frontend Developer Intern
                 </h4>
                 <p style={{ color: "rgba(255,255,255,0.85)", marginBottom: "0.2rem" }}>
-                  <strong>Techfusion Technologies</strong> — Navsari
+                  <strong>Techfusion Technologies</strong> ï¿½ Navsari
                 </p>
                 <p style={{ color: "rgba(255,255,255,0.7)" }}>
                   Oct 2025 - Dec 2025 | React.js, JavaScript, HTML5, CSS3, React Router DOM
