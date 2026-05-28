@@ -3,42 +3,6 @@ import { motion } from "framer-motion";
 import "./Skills.css";
 import { byCategory, loadPageItems } from "../lib/pageContent";
 
-const SKILLS = [
-  { name: "C", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" },
-  { name: "PHP", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" },
-  { name: "Python", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
-  { name: "JavaScript", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
-  { name: "React", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
-  { name: "HTML", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" },
-  { name: "CSS", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" },
-  { name: "Bootstrap", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" },
-  { name: "Tailwind", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" },
-  { name: "MySQL", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" },
-  { name: "SQL Server", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftsqlserver/microsoftsqlserver-plain.svg" },
-  { name: "MongoDB", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
-  { name: "Git", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
-  { name: "Flutter", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" },
-];
-
-const ROWS = [
-  [
-    { title: "Programming Languages", items: ["C", "PHP", "Python (Basics)", "JavaScript"] },
-    { title: "Frontend", items: ["React.js", "HTML5", "CSS3", "Bootstrap", "Tailwind CSS"] },
-    { title: "Backend", items: ["PHP", "ASP.NET (Basics)"] },
-    { title: "Databases & Tools", items: ["MySQL", "SQL Server", "MongoDB", "Git", "VS Code"] },
-  ],
-  [
-    {
-      title: "Core Concepts",
-      items: ["DBMS", "Object-Oriented Programming", "Operating Systems", "Data Structures", "Computer Networks"],
-    },
-    {
-      title: "Additional Strengths",
-      items: ["Problem Solving", "Analytical Skills", "Quick Learning", "Adaptability", "Communication", "Teamwork"],
-    },
-  ],
-];
-
 export default function Skills() {
   const stageRef = useRef();
   const [remoteItems, setRemoteItems] = useState([]);
@@ -51,12 +15,15 @@ export default function Skills() {
     };
   }, []);
 
-  const skills = byCategory(remoteItems, "skill").length
-    ? byCategory(remoteItems, "skill").map((item) => ({ name: item.title, logo: item.image }))
-    : SKILLS;
-  const groups = byCategory(remoteItems, "group").length
-    ? [byCategory(remoteItems, "group").map((item) => ({ title: item.title, items: item.items }))]
-    : ROWS;
+  const skills = byCategory(remoteItems, "skill").map((item) => ({ name: item.title, logo: item.image }));
+  const groups = byCategory(remoteItems, "group")
+    .map((item) => ({ title: item.title, items: item.items }))
+    .reduce((rows, group, index) => {
+      const rowIndex = Math.floor(index / 2);
+      rows[rowIndex] = rows[rowIndex] || [];
+      rows[rowIndex].push(group);
+      return rows;
+    }, []);
 
   useEffect(() => {
     const stage = stageRef.current;

@@ -3,7 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-const connectDb = require("./db");
+const connectDB = require("./db");
 const authRoutes = require("./routes/auth");
 const projectRoutes = require("./routes/projects");
 const pageRoutes = require("./routes/pages");
@@ -26,7 +26,7 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/pages", pageRoutes);
 app.use("/api/messages", messageRoutes);
 
-connectDb()
+connectDB()
   .then(() => {
     app.listen(port, () => {
       console.log(`API running at http://localhost:${port}`);

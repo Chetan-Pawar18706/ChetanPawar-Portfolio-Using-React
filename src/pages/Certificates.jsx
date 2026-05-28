@@ -2,11 +2,6 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { loadPageItems } from "../lib/pageContent";
 
-const CERTS = {
-  tech: [],
-  other: [],
-};
-
 export default function Certificates() {
   const [tab, setTab] = useState("tech");
   const [remoteCerts, setRemoteCerts] = useState(null);
@@ -33,7 +28,7 @@ export default function Certificates() {
     };
   }, []);
 
-  const certs = remoteCerts || CERTS;
+  const certs = remoteCerts || { tech: [], other: [] };
 
   return (
     <section className="container" style={{ padding: "40px 0" }}>

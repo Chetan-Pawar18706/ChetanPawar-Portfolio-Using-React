@@ -4,33 +4,10 @@ import "../CSS/Home.css"
 import '../index.css'
 
 import photo from '../../assets/chetan.jpg'
-import githubLogo from '../../public/github.png'
-import linkedinLogo from '../../public/linkedin.png'
-import gmailLogo from '../../public/gmail.png'
-import whatsappLogo from '../../public/whatsapp.png'
 import { byCategory, loadPageItems } from '../lib/pageContent'
 
 export default function Home() {
   const [remoteItems, setRemoteItems] = React.useState([])
-  const professionsFallback = [
-    'Software Developer Intern',
-    'Frontend Developer',
-    'React.js Developer',
-    'PHP & MySQL Developer',
-    'Flutter Learner',
-  ]
-
-  const quickLinksFallback = [
-    { img: githubLogo, title: 'GitHub', link: 'https://github.com/Chetan-Pawar18706' },
-    { img: linkedinLogo, title: 'LinkedIn', link: 'https://www.linkedin.com/in/chetan-pawarr' },
-    { img: gmailLogo, title: 'Email', link: 'mailto:chetanpawar8125@gmail.com' },
-    { img: whatsappLogo, title: 'WhatsApp', link: 'https://wa.me/919099281970' },
-  ]
-  const infoFallback = [
-    { label: 'Location', value: 'Navsari, Gujarat, India' },
-    { label: 'Expertise', value: 'React.js, PHP, MySQL, CRUD Apps' },
-    { label: 'Contact', value: 'chetanpawar8125@gmail.com' },
-  ]
 
   React.useEffect(() => {
     let active = true
@@ -41,15 +18,9 @@ export default function Home() {
   }, [])
 
   const hero = byCategory(remoteItems, 'hero')[0]
-  const professions = byCategory(remoteItems, 'profession').length
-    ? byCategory(remoteItems, 'profession').map((item) => item.title || item.text).filter(Boolean)
-    : professionsFallback
-  const infoCards = byCategory(remoteItems, 'info').length
-    ? byCategory(remoteItems, 'info').map((item) => ({ label: item.title, value: item.text }))
-    : infoFallback
-  const quickLinks = byCategory(remoteItems, 'link').length
-    ? byCategory(remoteItems, 'link').map((item) => ({ img: item.image, title: item.title, link: item.url || '#' }))
-    : quickLinksFallback
+  const professions = byCategory(remoteItems, 'profession').map((item) => item.title || item.text).filter(Boolean)
+  const infoCards = byCategory(remoteItems, 'info').map((item) => ({ label: item.title, value: item.text }))
+  const quickLinks = byCategory(remoteItems, 'link').map((item) => ({ img: item.image, title: item.title, link: item.url || '#' }))
 
   return (
     <section className="home-section">

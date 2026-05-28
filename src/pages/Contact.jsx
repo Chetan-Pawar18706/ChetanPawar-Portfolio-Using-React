@@ -2,10 +2,7 @@
 import { motion } from "framer-motion";
 import emailjs from "emailjs-com";
 
-import githubLogo from "../../public/github.png";
-import linkedinLogo from "../../public/linkedin.png";
-import gmailLogo from "../../public/gmail.png";
-import whatsappLogo from "../../public/whatsapp.png";
+
 
 import "../CSS/Contact.css"
 import '../index.css'
@@ -80,15 +77,13 @@ export default function Contact() {
   }, []);
 
   const quickLinksFallback = [
-    { img: githubLogo, title: "GitHub", link: "https://github.com/Chetan-Pawar18706" },
-    { img: linkedinLogo, title: "LinkedIn", link: "https://www.linkedin.com/in/chetan-pawarr" },
-    { img: gmailLogo, title: "Email", link: "mailto:chetanpawar8125@gmail.com" },
-    { img: whatsappLogo, title: "WhatsApp", link: "https://wa.me/919099281970" },
+    { img: "/github.png", title: "GitHub", link: "https://github.com/Chetan-Pawar18706" },
+    { img: "/linkedin.png", title: "LinkedIn", link: "https://www.linkedin.com/in/chetan-pawarr" },
+    { img: "/gmail.png", title: "Email", link: "mailto:chetanpawar8125@gmail.com" },
+    { img: "/whatsapp.png", title: "WhatsApp", link: "https://wa.me/919099281970" },
   ];
   const content = byCategory(remoteItems, "content")[0];
-  const quickLinks = byCategory(remoteItems, "link").length
-    ? byCategory(remoteItems, "link").map((item) => ({ img: item.image, title: item.title, link: item.url || "#" }))
-    : quickLinksFallback;
+  const quickLinks = byCategory(remoteItems, "link").map((item) => ({ img: item.image, title: item.title, link: item.url || "#" }));
 
   return (
     <section className="contact-section">

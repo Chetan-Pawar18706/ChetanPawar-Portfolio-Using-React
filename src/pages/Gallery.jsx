@@ -2,97 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import "../CSS/Gallery.css";
-
-import profile from "../../assets/chetan.jpg";
-import royalPalace from "../../assets/chetan_royal_palace.png";
-import classThrong from "../../assets/chetan_class_throng.png";
-import masalaMastery from "../../assets/chetan_masala_mastery.png";
-import musicStreamer from "../../assets/chetan_music_stremer.png";
-import coachingSystem from "../../assets/chetan_coaching_management_system.png";
-import serviceBooking from "../../assets/chetan_service_booking_system.png";
-import jobPortal from "../../assets/chetan_job_portal.png";
-import hospitalSystem from "../../assets/chetan_hospital_management_system.png";
-import eduHub from "../../assets/chetan_eduhub_online_exam.png";
 import { loadPageItems } from "../lib/pageContent";
-
-const IMAGES = {
-  personal: [
-    {
-      id: 1,
-      caption: "Chetan Sitaram Pawar - BCA student and aspiring Software Developer Intern.",
-      photos: [profile],
-    },
-  ],
-  projects: [
-    {
-      id: 1,
-      caption: "Royal Palace Management System - hotel operations, room booking, guest management, billing, and staff coordination.",
-      photos: [royalPalace],
-    },
-    {
-      id: 2,
-      caption: "Class Throng - PHP and MySQL project for registration, authentication, sessions, profiles, and dynamic content.",
-      photos: [classThrong],
-    },
-    {
-      id: 3,
-      caption: "Masala Mastery - PHP masala website with products, accounts, cart, recipes, blogs, and admin controls.",
-      photos: [masalaMastery],
-    },
-    {
-      id: 4,
-      caption: "Music Streamer - upload, manage, and listen to music tracks with playlists and admin dashboard.",
-      photos: [musicStreamer],
-    },
-    {
-      id: 5,
-      caption: "Coaching Management System - students, batches, fees, attendance, and centralized institute records.",
-      photos: [coachingSystem],
-    },
-    {
-      id: 6,
-      caption: "Service Booking System - users can register, browse, and book practical services.",
-      photos: [serviceBooking],
-    },
-    {
-      id: 7,
-      caption: "Job Portal - PHP and MySQL app with job posting, search, resume uploads, and application tracking.",
-      photos: [jobPortal],
-    },
-    {
-      id: 8,
-      caption: "Hospital Management System - patient registration, appointments, doctor management, billing, and role-based access.",
-      photos: [hospitalSystem],
-    },
-    {
-      id: 9,
-      caption: "EduHub Online Examination - secure MCQ online exams with admin control and instant result evaluation.",
-      photos: [eduHub],
-    },
-  ],
-  achievements: [
-    {
-      id: 1,
-      caption: "Royal Palace Management System - complete hotel management workflow with rooms, bookings, billing, and staff coordination.",
-      photos: [royalPalace],
-    },
-    {
-      id: 2,
-      caption: "Class Throng - dynamic PHP and MySQL platform with registration, sessions, profiles, and content management.",
-      photos: [classThrong],
-    },
-    {
-      id: 3,
-      caption: "EduHub Online Examination - secure MCQ exam system with admin controls and instant result evaluation.",
-      photos: [eduHub],
-    },
-    {
-      id: 4,
-      caption: "Service Booking System - practical service browsing and booking flow with user registration.",
-      photos: [serviceBooking],
-    },
-  ],
-};
 
 const pageVariants = {
   hidden: { opacity: 0, y: 40 },
@@ -146,7 +56,7 @@ export default function Gallery() {
     };
   }, []);
 
-  const images = remoteImages || IMAGES;
+  const images = remoteImages || { personal: [], projects: [], achievements: [] };
 
   const openZoom = (post, index) => setZoom({ img: post.photos[index], post, index });
   const closeZoom = () => setZoom({ img: null, post: null, index: 0 });

@@ -1,11 +1,11 @@
 require("dotenv").config();
 
 const bcrypt = require("bcryptjs");
-const connectDb = require("./db");
+const connectDB = require("./db");
 const Admin = require("./models/Admin");
 
 async function seedAdmin() {
-  await connectDb();
+  await connectDB();
 
   const email = (process.env.ADMIN_EMAIL || "admin@portfolio.com").toLowerCase();
   const password = process.env.ADMIN_PASSWORD || "admin123";

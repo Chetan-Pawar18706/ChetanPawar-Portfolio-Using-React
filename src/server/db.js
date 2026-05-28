@@ -1,11 +1,14 @@
 const mongoose = require("mongoose");
 
-async function connectDb() {
-  const uri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/chetan_portfolio";
+const connectDB = async () => {
+  const uri = process.env.MONGO_URI || process.env.MONGODB_URI;
+  if (!uri) {
+    throw new Error("MONGO_URI or MONGODB_URI must be defined");
+  }
 
   mongoose.set("strictQuery", true);
   await mongoose.connect(uri);
   console.log(`MongoDB connected: ${mongoose.connection.name}`);
-}
+};
 
-module.exports = connectDb;
+module.exports = connectDB;

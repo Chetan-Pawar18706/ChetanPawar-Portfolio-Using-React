@@ -2,40 +2,6 @@ import React from "react";
 import { motion } from "framer-motion";
 import { byCategory, loadPageItems } from "../lib/pageContent";
 
-const projects = [
-  "Royal Palace Management System",
-  "Class Throng",
-  "Masala Mastery",
-  "Music Streamer",
-  "Coaching Management System",
-  "Service Booking System",
-  "Job Portal",
-  "Hospital Management System",
-  "EduHub Online Examination",
-];
-
-const skills = [
-  "C",
-  "PHP",
-  "Python (Basics)",
-  "JavaScript",
-  "React.js",
-  "HTML5",
-  "CSS3",
-  "Bootstrap",
-  "Tailwind CSS",
-  "ASP.NET (Basics)",
-  "MySQL",
-  "SQL Server",
-  "MongoDB",
-  "Git",
-  "VS Code",
-  "DBMS",
-  "OOP",
-  "Operating Systems",
-  "Computer Networks",
-];
-
 export default function Resume() {
   const [remoteItems, setRemoteItems] = React.useState([]);
 
@@ -53,6 +19,9 @@ export default function Resume() {
   const remoteSkills = byCategory(remoteItems, "skill").flatMap((item) => item.items.length ? item.items : [item.title || item.text]).filter(Boolean);
   const links = byCategory(remoteItems, "link");
   const pdf = byCategory(remoteItems, "pdf")[0]?.url || "/resume.pdf";
+  const hasRemoteProjects = remoteProjects.length > 0;
+  const hasRemoteSkills = remoteSkills.length > 0;
+
   return (
     <section className="container" style={{ padding: "60px 0" }}>
       <motion.div
@@ -198,9 +167,13 @@ export default function Resume() {
         >
           <h4 style={{ fontSize: 20, color: "#00b4ff", marginBottom: 12 }}>Projects</h4>
           <ul style={{ listStyle: "none", padding: 0, margin: 0, lineHeight: 1.8 }}>
-            {(remoteProjects.length ? remoteProjects : projects).map((project, index) => (
-              <li key={project}>{index + 1}. {project}</li>
-            ))}
+            {hasRemoteProjects ? (
+              remoteProjects.map((project, index) => (
+                <li key={project}>{index + 1}. {project}</li>
+              ))
+            ) : (
+              <li style={{ color: "#bbb" }}>No projects available from the database.</li>
+            )}
           </ul>
         </motion.div>
 
@@ -212,7 +185,7 @@ export default function Resume() {
         >
           <h4 style={{ fontSize: 20, color: "#00b4ff", marginBottom: 12 }}>Skills</h4>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-            {(remoteSkills.length ? remoteSkills : skills).map((skill) => (
+            {hasRemoteSkills ? remoteSkills.map((skill) => (
               <motion.span
                 key={skill}
                 whileHover={{ scale: 1.1, backgroundColor: "rgba(0,180,255,0.3)" }}
@@ -226,7 +199,19 @@ export default function Resume() {
               >
                 {skill}
               </motion.span>
-            ))}
+            )) : (
+              <motion.span
+                style={{
+                  background: "rgba(255,255,255,0.05)",
+                  padding: "6px 12px",
+                  borderRadius: 8,
+                  fontSize: 13,
+                  color: "#bbb",
+                }}
+              >
+                No skills available from the database.
+              </motion.span>
+            )}
           </div>
         </motion.div>
 
