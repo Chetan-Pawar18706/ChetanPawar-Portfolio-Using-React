@@ -1,13 +1,28 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { byCategory, loadPageItems } from "../lib/pageContent";
+import { byCategory, loadPageItems, toContactLinks } from "../lib/pageContent";
+import { apiFetch } from "../lib/api";
 
 export default function Resume() {
   const [remoteItems, setRemoteItems] = React.useState([]);
+  const [contactItems, setContactItems] = React.useState([]);
+  const [projectItems, setProjectItems] = React.useState([]);
 
   React.useEffect(() => {
     let active = true;
-    loadPageItems("resume").then((items) => active && setRemoteItems(items)).catch(() => active && setRemoteItems([]));
+    Promise.all([loadPageItems("resume"), loadPageItems("contact"), apiFetch("/projects")])
+      .then(([resumeItems, contactContent, projects]) => {
+        if (!active) return;
+        setRemoteItems(resumeItems);
+        setContactItems(contactContent);
+        setProjectItems(Array.isArray(projects) ? projects : []);
+      })
+      .catch(() => {
+        if (!active) return;
+        setRemoteItems([]);
+        setContactItems([]);
+        setProjectItems([]);
+      });
     return () => {
       active = false;
     };
@@ -16,11 +31,10 @@ export default function Resume() {
   const profile = byCategory(remoteItems, "profile")[0];
   const section = byCategory(remoteItems, "section")[0];
   const summary = byCategory(remoteItems, "summary")[0];
-  const remoteProjects = byCategory(remoteItems, "project").map((item) => item.title || item.text).filter(Boolean);
+  const remoteProjects = projectItems.map((item) => item.title).filter(Boolean);
   const remoteSkills = byCategory(remoteItems, "skill").flatMap((item) => (item.items?.length ? item.items : [item.title || item.text])).filter(Boolean);
   const education = byCategory(remoteItems, "education");
   const experience = byCategory(remoteItems, "experience");
-  const links = byCategory(remoteItems, "link");
   const pdf = byCategory(remoteItems, "pdf")[0]?.url;
   const hasRemoteProjects = remoteProjects.length > 0;
   const hasRemoteSkills = remoteSkills.length > 0;
@@ -28,9 +42,7 @@ export default function Resume() {
   const hasRemoteExperience = experience.length > 0;
   const displayName = profile?.title || "Resume";
   const displayHeadline = profile?.text || "";
-  const resumeLinks = links
-    .map((item) => ({ name: item.title, link: item.url }))
-    .filter((item) => item.name && item.link);
+  const resumeLinks = toContactLinks(contactItems).map((item) => ({ name: item.title, link: item.link }));
 
   return (
     <section className="container" style={{ padding: "60px 0" }}>

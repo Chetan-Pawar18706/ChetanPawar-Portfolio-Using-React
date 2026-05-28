@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import "../CSS/Gallery.css";
 import { byCategory, loadPageItems } from "../lib/pageContent";
+import { apiFetch } from "../lib/api";
 
 const pageVariants = {
   hidden: { opacity: 0, y: 40 },
@@ -29,13 +30,15 @@ export default function Gallery() {
   const [zoom, setZoom] = useState({ img: null, post: null, index: 0 });
   const [remoteImages, setRemoteImages] = useState(null);
   const [pageItems, setPageItems] = useState([]);
+  const [projects, setProjects] = useState([]);
 
   React.useEffect(() => {
     let active = true;
-    loadPageItems("gallery")
-      .then((items) => {
+    Promise.all([loadPageItems("gallery"), apiFetch("/projects")])
+      .then(([items, projectItems]) => {
         if (!active) return;
         setPageItems(items);
+        setProjects(Array.isArray(projectItems) ? projectItems : []);
         if (items.length === 0) return;
         setRemoteImages(
           items.reduce(
@@ -52,14 +55,26 @@ export default function Gallery() {
           )
         );
       })
-      .catch(() => active && setRemoteImages(null));
+      .catch(() => {
+        if (!active) return;
+        setRemoteImages(null);
+        setProjects([]);
+      });
 
     return () => {
       active = false;
     };
   }, []);
 
-  const images = remoteImages || { personal: [], projects: [], achievements: [] };
+  const projectGalleryItems = projects.map((project) => ({
+    id: project._id,
+    caption: project.desc || project.title,
+    photos: [project.image].filter(Boolean),
+  }));
+  const images = {
+    ...(remoteImages || { personal: [], projects: [], achievements: [] }),
+    projects: projectGalleryItems,
+  };
   const section = byCategory(pageItems, "section")[0];
 
   const openZoom = (post, index) => setZoom({ img: post.photos[index], post, index });

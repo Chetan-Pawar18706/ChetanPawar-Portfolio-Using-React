@@ -8,3 +8,14 @@ export async function loadPageItems(slug) {
 export function byCategory(items, category) {
   return items.filter((item) => item.category === category);
 }
+
+export function toContactLinks(items) {
+  return byCategory(items, "link")
+    .map((item) => ({
+      id: item._id || `${item.title}-${item.url}`,
+      img: item.image,
+      title: item.title,
+      link: item.url || "#",
+    }))
+    .filter((item) => item.title && item.link);
+}

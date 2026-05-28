@@ -109,7 +109,6 @@ const pageSeeds = {
   ],
   gallery: [
     { category: "personal", title: "Profile", text: "Chetan Sitaram Pawar - BCA student and aspiring Software Developer Intern.", image: asset("chetan.jpg"), order: 1 },
-    ...projectSeeds.map((project, index) => ({ category: "projects", title: project.title, text: project.desc, image: project.image, order: index + 2 })),
     ...projectSeeds.slice(0, 4).map((project, index) => ({ category: "achievements", title: project.title, text: project.desc, image: project.image, order: index + 20 })),
   ],
   blog: [
@@ -148,19 +147,7 @@ const pageSeeds = {
   resume: [
     { category: "profile", title: "CHETAN SITARAM PAWAR", text: "BCA Student | Frontend Developer | Software Developer Intern", order: 1 },
     { category: "summary", title: "Professional Summary", text: "Detail-oriented and motivated BCA student with a strong foundation in Data Structures, DBMS, Computer Networks, and Operating Systems. Proficient in frontend development using React.js, JavaScript, HTML, and CSS, with working knowledge of PHP and MySQL.", order: 2 },
-    { category: "project", title: "Royal Palace Management System", order: 10 },
-    { category: "project", title: "Class Throng", order: 11 },
-    { category: "project", title: "Masala Mastery", order: 12 },
-    { category: "project", title: "Music Streamer", order: 13 },
-    { category: "project", title: "Coaching Management System", order: 14 },
-    { category: "project", title: "Service Booking System", order: 15 },
-    { category: "project", title: "Job Portal", order: 16 },
-    { category: "project", title: "Hospital Management System", order: 17 },
-    { category: "project", title: "EduHub Online Examination", order: 18 },
     { category: "skill", title: "Technical Skills", items: ["C", "PHP", "Python (Basics)", "JavaScript", "React.js", "HTML5", "CSS3", "Bootstrap", "Tailwind CSS", "ASP.NET (Basics)", "MySQL", "SQL Server", "MongoDB", "Git", "VS Code", "DBMS", "OOP", "Operating Systems", "Computer Networks"], order: 30 },
-    { category: "link", title: "GitHub", url: "#", order: 40 },
-    { category: "link", title: "LinkedIn", url: "#", order: 41 },
-    { category: "link", title: "Email", url: "mailto:chetanpawar8125@gmail.com", order: 42 },
     { category: "pdf", title: "Resume PDF", url: "/resume.pdf", order: 50 },
   ],
   about: [

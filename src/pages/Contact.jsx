@@ -7,7 +7,7 @@ import emailjs from "emailjs-com";
 import "../CSS/Contact.css"
 import '../index.css'
 import { apiFetch } from "../lib/api";
-import { byCategory, loadPageItems } from "../lib/pageContent";
+import { byCategory, loadPageItems, toContactLinks } from "../lib/pageContent";
 
 export default function Contact() {
   const [form, setForm] = useState({ name: "", contact: "", subject: "", message: "" });
@@ -77,7 +77,7 @@ export default function Contact() {
   }, []);
 
   const content = byCategory(remoteItems, "content")[0];
-  const quickLinks = byCategory(remoteItems, "link").map((item) => ({ img: item.image, title: item.title, link: item.url || "#" }));
+  const quickLinks = toContactLinks(remoteItems);
 
   return (
     <section className="contact-section">
@@ -102,7 +102,7 @@ export default function Contact() {
       <motion.div className="contact-links">
         {quickLinks.length > 0 ? quickLinks.map((item, i) => (
           <motion.a
-            key={i}
+            key={item.id || i}
             href={item.link}
             target="_blank"
             rel="noopener noreferrer"

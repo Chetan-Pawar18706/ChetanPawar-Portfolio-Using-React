@@ -26,13 +26,13 @@ const blankPageItem = {
 };
 
 const pages = [
-  { slug: "home", label: "Home", categories: "section, hero, profession, info, links-title, link" },
-  { slug: "gallery", label: "Gallery", categories: "section, personal, projects, achievements" },
+  { slug: "home", label: "Home", categories: "section, hero, profession, info, links-title", hiddenCategories: ["link"] },
+  { slug: "gallery", label: "Gallery", categories: "section, personal, achievements", hiddenCategories: ["projects"] },
   { slug: "projects", label: "Projects", special: "projects" },
   { slug: "blog", label: "Blog", categories: "section, post" },
   { slug: "skills", label: "Skills", categories: "section, skill, group" },
   { slug: "certificates", label: "Certificates", categories: "section, tech, other" },
-  { slug: "resume", label: "Resume", categories: "section, profile, summary, education, experience, project, skill, link, pdf" },
+  { slug: "resume", label: "Resume", categories: "section, profile, summary, education, experience, skill, pdf", hiddenCategories: ["link", "project"] },
   { slug: "about", label: "About Me", categories: "section, paragraph, education-title, education" },
   { slug: "contact", label: "Contact", categories: "content, link" },
   { slug: "messages", label: "Messages", special: "messages" },
@@ -267,7 +267,7 @@ export default function AdminPanel() {
           activePage={activePage}
           form={pageForm}
           setForm={setPageForm}
-          items={pageItems}
+          items={pageItems.filter((item) => !(activePage.hiddenCategories || []).includes(item.category))}
           isEditing={isEditing}
           loading={loading}
           status={status}

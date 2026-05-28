@@ -3,14 +3,25 @@ import { motion } from 'framer-motion'
 import "../CSS/Home.css"
 import '../index.css'
 
-import { byCategory, loadPageItems } from '../lib/pageContent'
+import { byCategory, loadPageItems, toContactLinks } from '../lib/pageContent'
 
 export default function Home() {
   const [remoteItems, setRemoteItems] = React.useState([])
+  const [contactItems, setContactItems] = React.useState([])
 
   React.useEffect(() => {
     let active = true
-    loadPageItems('home').then((items) => active && setRemoteItems(items)).catch(() => active && setRemoteItems([]))
+    Promise.all([loadPageItems('home'), loadPageItems('contact')])
+      .then(([homeItems, contactContent]) => {
+        if (!active) return
+        setRemoteItems(homeItems)
+        setContactItems(contactContent)
+      })
+      .catch(() => {
+        if (!active) return
+        setRemoteItems([])
+        setContactItems([])
+      })
     return () => {
       active = false
     }
@@ -19,8 +30,13 @@ export default function Home() {
   const section = byCategory(remoteItems, 'section')[0]
   const hero = byCategory(remoteItems, 'hero')[0]
   const professions = byCategory(remoteItems, 'profession').map((item) => item.title || item.text).filter(Boolean)
-  const infoCards = byCategory(remoteItems, 'info').map((item) => ({ label: item.title, value: item.text }))
-  const quickLinks = byCategory(remoteItems, 'link').map((item) => ({ img: item.image, title: item.title, link: item.url || '#' }))
+  const quickLinks = toContactLinks(contactItems)
+  const primaryContact = quickLinks.find((item) => /email|contact/i.test(item.title)) || quickLinks[0]
+  const primaryContactValue = primaryContact?.link?.replace(/^mailto:/, '').replace(/^https:\/\/wa\.me\//, '+')
+  const infoCards = byCategory(remoteItems, 'info').map((item) => ({
+    label: item.title,
+    value: /contact/i.test(item.title) && primaryContactValue ? primaryContactValue : item.text,
+  }))
   const displayName = hero?.title || section?.title || 'Portfolio'
   const introText = section?.text || 'Hi, I am'
   const headline = hero?.text || 'Content is loading from the database.'
@@ -107,7 +123,7 @@ export default function Home() {
         <div className="quick-links-list">
           {quickLinks.map((item, i) => (
             <motion.a
-              key={i}
+              key={item.id || i}
               href={item.link}
               title={item.title}
               target="_blank"
