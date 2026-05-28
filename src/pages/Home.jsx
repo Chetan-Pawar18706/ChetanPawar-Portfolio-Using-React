@@ -3,7 +3,6 @@ import { motion } from 'framer-motion'
 import "../CSS/Home.css"
 import '../index.css'
 
-import photo from '../../assets/chetan.jpg'
 import { byCategory, loadPageItems } from '../lib/pageContent'
 
 export default function Home() {
@@ -17,10 +16,14 @@ export default function Home() {
     }
   }, [])
 
+  const section = byCategory(remoteItems, 'section')[0]
   const hero = byCategory(remoteItems, 'hero')[0]
   const professions = byCategory(remoteItems, 'profession').map((item) => item.title || item.text).filter(Boolean)
   const infoCards = byCategory(remoteItems, 'info').map((item) => ({ label: item.title, value: item.text }))
   const quickLinks = byCategory(remoteItems, 'link').map((item) => ({ img: item.image, title: item.title, link: item.url || '#' }))
+  const displayName = hero?.title || section?.title || 'Portfolio'
+  const introText = section?.text || 'Hi, I am'
+  const headline = hero?.text || 'Content is loading from the database.'
 
   return (
     <section className="home-section">
@@ -53,8 +56,8 @@ export default function Home() {
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 1 }}
               className="profile-photo"
-              src={hero?.image || photo}
-              alt={hero?.title || "Chetan Sitaram Pawar"}
+              src={hero?.image || ''}
+              alt={displayName}
             />
           </motion.div>
         </motion.div>
@@ -66,18 +69,18 @@ export default function Home() {
           className="home-info"
         >
           <h1 className="home-title">
-            Hi, I’m{' '}
+            {introText}{' '}
             <motion.span
               animate={{ backgroundPositionX: ['0%', '200%'] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
               className="home-name"
             >
-              Chetan Pawar
+              {displayName}
             </motion.span>
           </h1>
 
           <p className="typing-effect">
-            {hero?.text || 'BCA Student | Frontend Developer | Software Developer Intern'}
+            {headline}
           </p>
 
           <motion.div className="profession-tags">
@@ -100,7 +103,7 @@ export default function Home() {
       </div>
 
       <motion.div className="quick-links">
-        <h2 className="quick-links-title">Connect with me</h2>
+        <h2 className="quick-links-title">{byCategory(remoteItems, 'links-title')[0]?.title || 'Links'}</h2>
         <div className="quick-links-list">
           {quickLinks.map((item, i) => (
             <motion.a

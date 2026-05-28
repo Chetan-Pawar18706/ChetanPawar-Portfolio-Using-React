@@ -1,11 +1,12 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ThumbsUp, ThumbsDown } from "lucide-react";
 import "./blog.css";
-import { loadPageItems } from "../lib/pageContent";
+import { byCategory, loadPageItems } from "../lib/pageContent";
 
 export default function Blog() {
   const [posts, setPosts] = useState([]);
+  const [pageItems, setPageItems] = useState([]);
 
   useEffect(() => {
     let active = true;
@@ -20,15 +21,25 @@ export default function Blog() {
 
     loadPageItems("blog")
       .then((items) => {
-        const source = items.map((item) => ({ id: item._id, title: item.title, text: item.text }));
-        if (active) setPosts(applyVotes(source));
+        const source = byCategory(items, "post").map((item) => ({ id: item._id, title: item.title, text: item.text }));
+        if (active) {
+          setPageItems(items);
+          setPosts(applyVotes(source));
+        }
       })
-      .catch(() => active && setPosts([]));
+      .catch(() => {
+        if (active) {
+          setPageItems([]);
+          setPosts([]);
+        }
+      });
 
     return () => {
       active = false;
     };
   }, []);
+
+  const section = byCategory(pageItems, "section")[0];
 
   function vote(id, type) {
     const votedByUser = JSON.parse(localStorage.getItem("cp_blog_voted") || "{}");
@@ -47,12 +58,12 @@ export default function Blog() {
   return (
     <motion.section className="blog-section" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
       <motion.h2 className="blog-title" initial={{ y: -15, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6 }}>
-        My Blog
+        {section?.title || "Blog"}
       </motion.h2>
-      <p className="blog-sub">Project learnings, development notes, and reflections.</p>
+      <p className="blog-sub">{section?.text || "Blog content is loaded from the database."}</p>
 
       <div className="blog-grid">
-        {posts.map((p, idx) => (
+        {posts.length > 0 ? posts.map((p, idx) => (
           <motion.div
             key={p.id}
             className="blog-post"
@@ -80,7 +91,9 @@ export default function Blog() {
               </motion.button>
             </div>
           </motion.div>
-        ))}
+        )) : (
+          <p style={{ color: "#bbb" }}>No blog posts available from the database.</p>
+        )}
       </div>
     </motion.section>
   );

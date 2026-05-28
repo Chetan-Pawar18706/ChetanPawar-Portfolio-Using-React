@@ -14,6 +14,7 @@ export default function Resume() {
   }, []);
 
   const profile = byCategory(remoteItems, "profile")[0];
+  const section = byCategory(remoteItems, "section")[0];
   const summary = byCategory(remoteItems, "summary")[0];
   const remoteProjects = byCategory(remoteItems, "project").map((item) => item.title || item.text).filter(Boolean);
   const remoteSkills = byCategory(remoteItems, "skill").flatMap((item) => (item.items?.length ? item.items : [item.title || item.text])).filter(Boolean);
@@ -52,7 +53,7 @@ export default function Resume() {
           transition={{ delay: 0.2 }}
           style={{ fontSize: 28, color: "#00b4ff", marginBottom: 12 }}
         >
-          Resume
+          {section?.title || "Resume"}
         </motion.h2>
 
         <motion.p
@@ -61,7 +62,7 @@ export default function Resume() {
           transition={{ delay: 0.3 }}
           style={{ color: "#aaa", marginBottom: 25 }}
         >
-          A quick glance at my education, experience, projects, and technical skills.
+          {section?.text || "Resume content is loaded from the database."}
         </motion.p>
 
         <motion.div
@@ -281,7 +282,7 @@ export default function Resume() {
           {pdf ? (
             <iframe
               src={pdf}
-              title="Chetan Pawar Resume"
+              title={`${displayName} Resume`}
               style={{
                 width: "100%",
                 height: "650px",

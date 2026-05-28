@@ -26,14 +26,14 @@ const blankPageItem = {
 };
 
 const pages = [
-  { slug: "home", label: "Home", categories: "hero, profession, info, link" },
-  { slug: "gallery", label: "Gallery", categories: "personal, projects, achievements" },
+  { slug: "home", label: "Home", categories: "section, hero, profession, info, links-title, link" },
+  { slug: "gallery", label: "Gallery", categories: "section, personal, projects, achievements" },
   { slug: "projects", label: "Projects", special: "projects" },
-  { slug: "blog", label: "Blog", categories: "post" },
-  { slug: "skills", label: "Skills", categories: "skill, group" },
-  { slug: "certificates", label: "Certificates", categories: "tech, other" },
-  { slug: "resume", label: "Resume", categories: "profile, summary, education, experience, project, skill, link, pdf" },
-  { slug: "about", label: "About Me", categories: "paragraph, education" },
+  { slug: "blog", label: "Blog", categories: "section, post" },
+  { slug: "skills", label: "Skills", categories: "section, skill, group" },
+  { slug: "certificates", label: "Certificates", categories: "section, tech, other" },
+  { slug: "resume", label: "Resume", categories: "section, profile, summary, education, experience, project, skill, link, pdf" },
+  { slug: "about", label: "About Me", categories: "section, paragraph, education-title, education" },
   { slug: "contact", label: "Contact", categories: "content, link" },
   { slug: "messages", label: "Messages", special: "messages" },
 ];

@@ -2,7 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import "../CSS/Gallery.css";
-import { loadPageItems } from "../lib/pageContent";
+import { byCategory, loadPageItems } from "../lib/pageContent";
 
 const pageVariants = {
   hidden: { opacity: 0, y: 40 },
@@ -28,12 +28,15 @@ export default function Gallery() {
   const [tab, setTab] = useState("personal");
   const [zoom, setZoom] = useState({ img: null, post: null, index: 0 });
   const [remoteImages, setRemoteImages] = useState(null);
+  const [pageItems, setPageItems] = useState([]);
 
   React.useEffect(() => {
     let active = true;
     loadPageItems("gallery")
       .then((items) => {
-        if (!active || items.length === 0) return;
+        if (!active) return;
+        setPageItems(items);
+        if (items.length === 0) return;
         setRemoteImages(
           items.reduce(
             (groups, item) => {
@@ -57,6 +60,7 @@ export default function Gallery() {
   }, []);
 
   const images = remoteImages || { personal: [], projects: [], achievements: [] };
+  const section = byCategory(pageItems, "section")[0];
 
   const openZoom = (post, index) => setZoom({ img: post.photos[index], post, index });
   const closeZoom = () => setZoom({ img: null, post: null, index: 0 });
@@ -75,7 +79,7 @@ export default function Gallery() {
 
   return (
     <motion.section className="gallery-container" variants={pageVariants} initial="hidden" animate="visible" exit="hidden">
-      <motion.h2 className="gallery-title" variants={childVariants}>Gallery</motion.h2>
+      <motion.h2 className="gallery-title" variants={childVariants}>{section?.title || "Gallery"}</motion.h2>
 
       <motion.div className="tab-buttons" variants={childVariants}>
         {["personal", "projects", "achievements"].map((type) => (
@@ -105,6 +109,9 @@ export default function Gallery() {
               </div>
             </motion.div>
           ))}
+          {(images[tab] || []).length === 0 && (
+            <p style={{ color: "#bbb" }}>No gallery items available from the database.</p>
+          )}
         </motion.div>
       </AnimatePresence>
 

@@ -15,6 +15,7 @@ export default function Skills() {
     };
   }, []);
 
+  const section = byCategory(remoteItems, "section")[0];
   const skills = byCategory(remoteItems, "skill").map((item) => ({ name: item.title, logo: item.image }));
   const groups = byCategory(remoteItems, "group")
     .map((item) => ({ title: item.title, items: item.items }))
@@ -74,10 +75,10 @@ export default function Skills() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
       >
-        <h2 className="text-5xl text-cyan-400 font-semibold mb-3">My Skills</h2>
+        <h2 className="text-5xl text-cyan-400 font-semibold mb-3">{section?.title || "Skills"}</h2>
         <div className="w-28 h-[2px] bg-cyan-400 mx-auto mb-6"></div>
         <p className="text-gray-400 text-lg max-w-xl mx-auto">
-          Frontend development, backend fundamentals, databases, and core computer science concepts.
+          {section?.text || "Skill content is loaded from the database."}
         </p>
       </motion.div>
 
@@ -97,7 +98,7 @@ export default function Skills() {
           position: "relative",
         }}
       >
-        {skills.map((s, i) => (
+        {skills.length > 0 ? skills.map((s, i) => (
           <motion.div
             key={s.name}
             className="skill-circle"
@@ -152,11 +153,15 @@ export default function Skills() {
               {s.name}
             </span>
           </motion.div>
-        ))}
+        )) : (
+          <div style={{ color: "rgba(180,255,255,0.9)", padding: 24 }}>
+            No skills available from the database.
+          </div>
+        )}
       </motion.div>
 
       <div className="skills-table">
-        {groups.map((row, rowIndex) => (
+        {groups.length > 0 ? groups.map((row, rowIndex) => (
           <div key={rowIndex} className="skills-row">
             {row.map((col, colIndex) => (
               <motion.div
@@ -178,10 +183,11 @@ export default function Skills() {
               </motion.div>
             ))}
           </div>
-        ))}
+        )) : (
+          <p style={{ color: "rgba(255,255,255,0.7)" }}>No skill groups available from the database.</p>
+        )}
       </div>
     </section>
   );
 }
-
 

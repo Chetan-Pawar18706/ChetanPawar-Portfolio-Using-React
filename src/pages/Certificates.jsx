@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { loadPageItems } from "../lib/pageContent";
+import { byCategory, loadPageItems } from "../lib/pageContent";
 
 export default function Certificates() {
   const [tab, setTab] = useState("tech");
   const [remoteCerts, setRemoteCerts] = useState(null);
+  const [pageItems, setPageItems] = useState([]);
 
   React.useEffect(() => {
     let active = true;
     loadPageItems("certificates")
       .then((items) => {
-        if (!active || items.length === 0) return;
+        if (!active) return;
+        setPageItems(items);
+        if (items.length === 0) return;
         setRemoteCerts(
           items.reduce(
             (groups, item) => {
@@ -29,13 +32,14 @@ export default function Certificates() {
   }, []);
 
   const certs = remoteCerts || { tech: [], other: [] };
+  const section = byCategory(pageItems, "section")[0];
 
   return (
     <section className="container" style={{ padding: "40px 0" }}>
       <div className="card" style={{ background: "#111", borderRadius: 12, padding: 24 }}>
-        <h2 style={{ fontSize: "1.8rem", color: "#fff", marginBottom: 4 }}>Certificates</h2>
+        <h2 style={{ fontSize: "1.8rem", color: "#fff", marginBottom: 4 }}>{section?.title || "Certificates"}</h2>
         <p className="lead" style={{ color: "#aaa" }}>
-          Certifications and achievements will be updated here.
+          {section?.text || "Certificate content is loaded from the database."}
         </p>
 
         <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
@@ -80,9 +84,9 @@ export default function Certificates() {
                 transition={{ duration: 0.4 }}
                 style={{ background: "#1a1a1a", borderRadius: 12, padding: 16, color: "#fff" }}
               >
-                <strong style={{ fontSize: 16 }}>No certificate uploaded yet</strong>
+                <strong style={{ fontSize: 16 }}>No certificate available from the database.</strong>
                 <div className="muted" style={{ fontSize: 13, color: "#bbb", marginTop: 8 }}>
-                  Add certificate images in public/certs and update this section when available.
+                  Add certificates from the admin panel to show them here.
                 </div>
               </motion.div>
             )}
@@ -110,4 +114,3 @@ export default function Certificates() {
     </section>
   );
 }
-

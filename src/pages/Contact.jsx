@@ -76,12 +76,6 @@ export default function Contact() {
     };
   }, []);
 
-  const quickLinksFallback = [
-    { img: "/github.png", title: "GitHub", link: "https://github.com/Chetan-Pawar18706" },
-    { img: "/linkedin.png", title: "LinkedIn", link: "https://www.linkedin.com/in/chetan-pawarr" },
-    { img: "/gmail.png", title: "Email", link: "mailto:chetanpawar8125@gmail.com" },
-    { img: "/whatsapp.png", title: "WhatsApp", link: "https://wa.me/919099281970" },
-  ];
   const content = byCategory(remoteItems, "content")[0];
   const quickLinks = byCategory(remoteItems, "link").map((item) => ({ img: item.image, title: item.title, link: item.url || "#" }));
 
@@ -93,7 +87,7 @@ export default function Contact() {
         transition={{ duration: 0.7 }}
         className="contact-title"
       >
-        {content?.title || "Let’s Connect & Collaborate"}
+        {content?.title || "Contact"}
       </motion.h1>
 
       <motion.p
@@ -102,11 +96,11 @@ export default function Contact() {
         transition={{ delay: 0.3, duration: 0.8 }}
         className="contact-subtitle"
       >
-        {content?.text || "Open to Software Developer Intern roles, frontend opportunities, and real-world project collaboration."}
+        {content?.text || "Contact content is loaded from the database."}
       </motion.p>
 
       <motion.div className="contact-links">
-        {quickLinks.map((item, i) => (
+        {quickLinks.length > 0 ? quickLinks.map((item, i) => (
           <motion.a
             key={i}
             href={item.link}
@@ -124,7 +118,9 @@ export default function Contact() {
               transition={{ duration: 3 + i * 0.3, repeat: Infinity, ease: "easeInOut" }}
             />
           </motion.a>
-        ))}
+        )) : (
+          <span style={{ color: "#bbb" }}>No contact links available from the database.</span>
+        )}
       </motion.div>
 
       <motion.form

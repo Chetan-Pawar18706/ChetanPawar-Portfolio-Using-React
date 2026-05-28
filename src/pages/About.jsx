@@ -1,10 +1,11 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { FaUniversity, FaLaptopCode, FaGraduationCap } from "react-icons/fa";
+import { FaUniversity } from "react-icons/fa";
 import { byCategory, loadPageItems } from "../lib/pageContent";
 
 const AboutMe = () => {
   const [remoteItems, setRemoteItems] = React.useState([]);
+
   React.useEffect(() => {
     let active = true;
     loadPageItems("about").then((items) => active && setRemoteItems(items)).catch(() => active && setRemoteItems([]));
@@ -12,8 +13,12 @@ const AboutMe = () => {
       active = false;
     };
   }, []);
+
+  const section = byCategory(remoteItems, "section")[0];
   const paragraphs = byCategory(remoteItems, "paragraph");
+  const educationTitle = byCategory(remoteItems, "education-title")[0];
   const adminEducation = byCategory(remoteItems, "education");
+
   return (
     <div
       style={{
@@ -54,7 +59,7 @@ const AboutMe = () => {
             color: "transparent",
           }}
         >
-          About Me
+          {section?.title || "About"}
         </h2>
 
         {paragraphs.length > 0 ? (
@@ -64,25 +69,9 @@ const AboutMe = () => {
             </p>
           ))
         ) : (
-          <>
-            <p
-              style={{
-                fontSize: "1.1rem",
-                color: "rgba(255,255,255,0.85)",
-                marginBottom: "1rem",
-              }}
-            >
-              Hi, Im <strong>Chetan Sitaram Pawar</strong>, a detail-oriented BCA student with a strong foundation in Data Structures, DBMS, Computer Networks, and Operating Systems.
-            </p>
-
-            <p style={{ fontSize: "1.1rem", color: "rgba(255,255,255,0.8)" }}>
-              I build responsive frontend interfaces with <strong>React.js, JavaScript, HTML, and CSS</strong>, and I also work with backend technologies including <strong>PHP and MySQL</strong>. I enjoy creating CRUD-based web applications with clean navigation, secure role-based access, and practical user workflows.
-            </p>
-
-            <p style={{ fontSize: "1.1rem", color: "rgba(255,255,255,0.8)" }}>
-              I am eager to start my career as a <strong>Software Developer Intern</strong> and contribute to real-world projects while continuing to improve in web and app development.
-            </p>
-          </>
+          <p style={{ fontSize: "1.1rem", color: "rgba(255,255,255,0.8)" }}>
+            About content is not available in the database.
+          </p>
         )}
 
         <motion.div
@@ -100,106 +89,40 @@ const AboutMe = () => {
               color: "transparent",
             }}
           >
-            Education & Learning
+            {educationTitle?.title || "Education"}
           </h3>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "1.2rem" }}>
-            {adminEducation.map((item) => (
-              <motion.div key={item._id} whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(0,255,200,0.15)" }} transition={{ duration: 0.3 }} style={{ background: "rgba(255,255,255,0.05)", borderRadius: "14px", padding: "1.5rem 2rem", border: "1px solid rgba(255,255,255,0.08)", boxShadow: "0 0 15px rgba(0,255,200,0.05)", display: "flex", alignItems: "center", gap: "1.2rem" }}>
-                <FaUniversity size={40} color="var(--accent)" />
-                <div>
-                  <h4 style={{ color: "var(--accent)", marginBottom: "0.4rem", fontSize: "1.25rem" }}>{item.title}</h4>
-                  <p style={{ color: "rgba(255,255,255,0.85)", marginBottom: "0.2rem" }}>{item.text}</p>
-                  {item.items.map((line) => <p key={line} style={{ color: "rgba(255,255,255,0.7)" }}>{line}</p>)}
-                </div>
-              </motion.div>
-            ))}
-            <motion.div
-              whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(0,255,200,0.15)" }}
-              transition={{ duration: 0.3 }}
-              style={{
-                background: "rgba(255,255,255,0.05)",
-                borderRadius: "14px",
-                padding: "1.5rem 2rem",
-                border: "1px solid rgba(255,255,255,0.08)",
-                boxShadow: "0 0 15px rgba(0,255,200,0.05)",
-                display: "flex",
-                alignItems: "center",
-                gap: "1.2rem",
-              }}
-            >
-              <FaUniversity size={40} color="var(--accent)" />
-              <div>
-                <h4 style={{ color: "var(--accent)", marginBottom: "0.4rem", fontSize: "1.25rem" }}>
-                  Bachelor of Computer Applications (BCA)
-                </h4>
-                <p style={{ color: "rgba(255,255,255,0.85)", marginBottom: "0.2rem" }}>
-                  <strong>Naran Lala College of Professional & Applied Sciences</strong> � Navsari
-                </p>
-                <p style={{ color: "rgba(255,255,255,0.7)" }}>
-                  Veer Narmad South Gujarat University, Surat, Gujarat
-                </p>
-                <p style={{ color: "rgba(255,255,255,0.7)" }}>
-                  July 2023 - May 2026 | CGPA: 7.76 | Percentage: 77.60%
-                </p>
-              </div>
-            </motion.div>
-
-            <motion.div
-              whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(0,255,200,0.15)" }}
-              transition={{ duration: 0.3 }}
-              style={{
-                background: "rgba(255,255,255,0.05)",
-                borderRadius: "14px",
-                padding: "1.5rem 2rem",
-                border: "1px solid rgba(255,255,255,0.08)",
-                boxShadow: "0 0 15px rgba(0,255,200,0.05)",
-                display: "flex",
-                alignItems: "center",
-                gap: "1.2rem",
-              }}
-            >
-              <FaLaptopCode size={38} color="var(--accent)" />
-              <div>
-                <h4 style={{ color: "var(--accent)", marginBottom: "0.4rem", fontSize: "1.25rem" }}>
-                  Frontend Developer Intern
-                </h4>
-                <p style={{ color: "rgba(255,255,255,0.85)", marginBottom: "0.2rem" }}>
-                  <strong>Techfusion Technologies</strong> � Navsari
-                </p>
-                <p style={{ color: "rgba(255,255,255,0.7)" }}>
-                  Oct 2025 - Dec 2025 | React.js, JavaScript, HTML5, CSS3, React Router DOM
-                </p>
-              </div>
-            </motion.div>
-
-            <motion.div
-              whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(0,255,200,0.15)" }}
-              transition={{ duration: 0.3 }}
-              style={{
-                background: "rgba(255,255,255,0.05)",
-                borderRadius: "14px",
-                padding: "1.5rem 2rem",
-                border: "1px solid rgba(255,255,255,0.08)",
-                boxShadow: "0 0 15px rgba(0,255,200,0.05)",
-                display: "flex",
-                alignItems: "center",
-                gap: "1.2rem",
-              }}
-            >
-              <FaGraduationCap size={36} color="var(--accent)" />
-              <div>
-                <h4 style={{ color: "var(--accent)", marginBottom: "0.4rem", fontSize: "1.25rem" }}>
-                  Independent Learning - App Development
-                </h4>
-                <p style={{ color: "rgba(255,255,255,0.85)", marginBottom: "0.2rem" }}>
-                  <strong>Online Platforms</strong>
-                </p>
-                <p style={{ color: "rgba(255,255,255,0.7)" }}>
-                  2026 - Present | Dart, Flutter, mini-projects, debugging, and problem-solving
-                </p>
-              </div>
-            </motion.div>
+            {adminEducation.length > 0 ? (
+              adminEducation.map((item) => (
+                <motion.div
+                  key={item._id}
+                  whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(0,255,200,0.15)" }}
+                  transition={{ duration: 0.3 }}
+                  style={{
+                    background: "rgba(255,255,255,0.05)",
+                    borderRadius: "14px",
+                    padding: "1.5rem 2rem",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    boxShadow: "0 0 15px rgba(0,255,200,0.05)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "1.2rem",
+                  }}
+                >
+                  <FaUniversity size={40} color="var(--accent)" />
+                  <div>
+                    <h4 style={{ color: "var(--accent)", marginBottom: "0.4rem", fontSize: "1.25rem" }}>{item.title}</h4>
+                    {item.text && <p style={{ color: "rgba(255,255,255,0.85)", marginBottom: "0.2rem" }}>{item.text}</p>}
+                    {item.items.map((line) => (
+                      <p key={line} style={{ color: "rgba(255,255,255,0.7)" }}>{line}</p>
+                    ))}
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <p style={{ color: "rgba(255,255,255,0.7)" }}>Education content is not available in the database.</p>
+            )}
           </div>
         </motion.div>
       </motion.div>
@@ -208,4 +131,3 @@ const AboutMe = () => {
 };
 
 export default AboutMe;
-

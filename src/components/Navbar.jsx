@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { byCategory, loadPageItems } from "../lib/pageContent";
 
 const links = [
   { label: "Home", to: "/" },
@@ -18,8 +19,12 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [showButton, setShowButton] = useState(false);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [homeItems, setHomeItems] = useState([]);
   const navRef = useRef(null);
   const linksRef = useRef(null);
+  const hero = byCategory(homeItems, "hero")[0];
+  const brand = hero?.title || byCategory(homeItems, "section")[0]?.title || "Portfolio";
+  const tagline = hero?.text || "";
 
   // Check if links overflow nav width (to show hamburger)
   const checkOverflow = () => {
@@ -33,6 +38,14 @@ export default function Navbar() {
     checkOverflow();
     window.addEventListener("resize", checkOverflow);
     return () => window.removeEventListener("resize", checkOverflow);
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    loadPageItems("home").then((items) => active && setHomeItems(items)).catch(() => active && setHomeItems([]));
+    return () => {
+      active = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -80,12 +93,12 @@ export default function Navbar() {
               color: "var(--accent)",
             }}
           >
-            CP
+            {brand.split(/\s+/).filter(Boolean).slice(0, 2).map((word) => word[0]).join("").toUpperCase() || "P"}
           </motion.div>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <h1 style={{ margin: 0, fontSize: 14 }}>Chetan Pawar</h1>
+            <h1 style={{ margin: 0, fontSize: 14 }}>{brand}</h1>
             <div style={{ fontSize: 12, color: "var(--muted)" }}>
-              Software Developer
+              {tagline}
             </div>
           </div>
         </div>
@@ -326,4 +339,3 @@ export default function Navbar() {
     </>
   );
 }
-

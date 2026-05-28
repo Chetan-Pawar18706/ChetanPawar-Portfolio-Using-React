@@ -45,11 +45,11 @@ export default function Projects() {
           Projects
         </motion.h2>
         <p className="text-gray-400 mb-10">
-          Practical web and software projects built with Java, PHP, MySQL, JavaScript, and responsive UI design.
+          Project data is loaded from the database.
         </p>
 
         <div className="projects-grid" style={{ display: 'grid', gap: 24, gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))' }}>
-          {projects.map((p, idx) => (
+          {projects.length > 0 ? projects.map((p, idx) => (
             <motion.div
               key={idx}
               className="project-card"
@@ -147,7 +147,9 @@ export default function Projects() {
                 </div>
               </div>
             </motion.div>
-          ))}
+          )) : (
+            <p style={{ color: '#bbb' }}>No projects available from the database.</p>
+          )}
         </div>
       </div>
     </motion.section>

@@ -93,6 +93,7 @@ const projectSeeds = [
 
 const pageSeeds = {
   home: [
+    { category: "section", title: "Chetan Sitaram Pawar", text: "Hi, I am", order: 0 },
     { category: "hero", title: "Chetan Sitaram Pawar", text: "BCA Student | Frontend Developer | Software Developer Intern", image: asset("chetan.jpg"), order: 1 },
     { category: "profession", title: "Software Developer Intern", order: 2 },
     { category: "profession", title: "Frontend Developer", order: 3 },
@@ -102,23 +103,27 @@ const pageSeeds = {
     { category: "info", title: "Location", text: "Navsari, Gujarat, India", order: 7 },
     { category: "info", title: "Expertise", text: "React.js, PHP, MySQL, CRUD Apps", order: 8 },
     { category: "info", title: "Contact", text: "chetanpawar8125@gmail.com", order: 9 },
+    { category: "links-title", title: "Connect with me", order: 9.5 },
     { category: "link", title: "GitHub", image: "/github.png", url: "#", order: 10 },
     { category: "link", title: "LinkedIn", image: "/linkedin.png", url: "#", order: 11 },
     { category: "link", title: "Email", image: "/gmail.png", url: "mailto:chetanpawar8125@gmail.com", order: 12 },
     { category: "link", title: "WhatsApp", image: "/whatsapp.png", url: "https://wa.me/919099281970", order: 13 },
   ],
   gallery: [
+    { category: "section", title: "Gallery", order: 0 },
     { category: "personal", title: "Profile", text: "Chetan Sitaram Pawar - BCA student and aspiring Software Developer Intern.", image: asset("chetan.jpg"), order: 1 },
     ...projectSeeds.map((project, index) => ({ category: "projects", title: project.title, text: project.desc, image: project.image, order: index + 2 })),
     ...projectSeeds.slice(0, 4).map((project, index) => ({ category: "achievements", title: project.title, text: project.desc, image: project.image, order: index + 20 })),
   ],
   blog: [
+    { category: "section", title: "My Blog", text: "Project learnings, development notes, and reflections.", order: 0 },
     { category: "post", title: "Why I Enjoy Building CRUD Applications", text: "CRUD projects teach the complete flow of a real application: forms, validation, database design, authentication, and user-friendly dashboards. They helped me understand how frontend and backend work together.", order: 1 },
     { category: "post", title: "What React.js Taught Me", text: "React helped me think in reusable components, props, hooks, and routing. It also improved the way I structure frontend code for responsive and interactive interfaces.", order: 2 },
     { category: "post", title: "Learning PHP and MySQL Through Projects", text: "Building systems like attendance management and online examination platforms improved my understanding of sessions, role-based access, relational tables, and secure data handling.", order: 3 },
     { category: "post", title: "Exploring Flutter and App Development", text: "I am learning Dart and Flutter through mini-projects to expand beyond web development and strengthen my problem-solving and debugging skills.", order: 4 },
   ],
   skills: [
+    { category: "section", title: "My Skills", text: "Frontend development, backend fundamentals, databases, and core computer science concepts.", order: 0 },
     ...[
       ["C", "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg"],
       ["PHP", "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg"],
@@ -143,9 +148,11 @@ const pageSeeds = {
     { category: "group", title: "Additional Strengths", items: ["Problem Solving", "Analytical Skills", "Quick Learning", "Adaptability", "Communication", "Teamwork"], order: 25 },
   ],
   certificates: [
+    { category: "section", title: "Certificates", text: "Certifications and achievements will be updated here.", order: 0 },
     { category: "tech", title: "No certificate uploaded yet", text: "Add certificate images from admin when available.", order: 1, published: false },
   ],
   resume: [
+    { category: "section", title: "Resume", text: "A quick glance at my education, experience, projects, and technical skills.", order: 0 },
     { category: "profile", title: "CHETAN SITARAM PAWAR", text: "BCA Student | Frontend Developer | Software Developer Intern", order: 1 },
     { category: "summary", title: "Professional Summary", text: "Detail-oriented and motivated BCA student with a strong foundation in Data Structures, DBMS, Computer Networks, and Operating Systems. Proficient in frontend development using React.js, JavaScript, HTML, and CSS, with working knowledge of PHP and MySQL.", order: 2 },
     { category: "education", title: "Bachelor of Computer Applications (BCA)", text: "Naran Lala College of Professional & Applied Sciences - Navsari", items: ["Veer Narmad South Gujarat University, Surat, Gujarat", "July 2023 - May 2026 | CGPA: 7.76 | Percentage: 77.60%"], order: 10 },
@@ -167,9 +174,11 @@ const pageSeeds = {
     { category: "pdf", title: "Resume PDF", url: "/resume.pdf", order: 60 },
   ],
   about: [
+    { category: "section", title: "About Me", order: 0 },
     { category: "paragraph", text: "Hi, I’m Chetan Sitaram Pawar, a detail-oriented BCA student with a strong foundation in Data Structures, DBMS, Computer Networks, and Operating Systems.", order: 1 },
     { category: "paragraph", text: "I build responsive frontend interfaces with React.js, JavaScript, HTML, and CSS, and I also work with backend technologies including PHP and MySQL. I enjoy creating CRUD-based web applications with clean navigation, secure role-based access, and practical user workflows.", order: 2 },
     { category: "paragraph", text: "I am eager to start my career as a Software Developer Intern and contribute to real-world projects while continuing to improve in web and app development.", order: 3 },
+    { category: "education-title", title: "Education & Learning", order: 9 },
     { category: "education", title: "Bachelor of Computer Applications (BCA)", text: "Naran Lala College of Professional & Applied Sciences - Navsari", items: ["Veer Narmad South Gujarat University, Surat, Gujarat", "July 2023 - May 2026 | CGPA: 7.76 | Percentage: 77.60%"], order: 10 },
     { category: "education", title: "Frontend Developer Intern", text: "Techfusion Technologies - Navsari", items: ["Oct 2025 - Dec 2025 | React.js, JavaScript, HTML5, CSS3, React Router DOM"], order: 11 },
     { category: "education", title: "Independent Learning - App Development", text: "Online Platforms", items: ["2026 - Present | Dart, Flutter, mini-projects, debugging, and problem-solving"], order: 12 },
