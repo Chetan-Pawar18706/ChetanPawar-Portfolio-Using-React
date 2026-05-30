@@ -42,6 +42,7 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/projects/pages", pageRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/pages", pageRoutes);
 app.use("/api/messages", messageRoutes);

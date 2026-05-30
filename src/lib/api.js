@@ -1,4 +1,10 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+function normalizeApiUrl(url) {
+  return String(url || "http://localhost:5000/api")
+    .replace(/\/+$/, "")
+    .replace(/\/projects$/, "");
+}
+
+const API_URL = normalizeApiUrl(import.meta.env.VITE_API_URL);
 const TOKEN_KEY = "portfolio_admin_token";
 
 export function getToken() {
