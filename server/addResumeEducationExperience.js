@@ -3,8 +3,7 @@ require('dotenv').config();
 const { connectDB } = require('./db');
 const { pageModels } = require('./models/PageContent');
 
-const API_ORIGIN = process.env.API_ORIGIN || `http://localhost:${process.env.PORT || 5000}`;
-const asset = (name) => `${API_ORIGIN}/assets/${name}`;
+const asset = (name) => `/assets/${name}`;
 
 async function addItems() {
   await connectDB();

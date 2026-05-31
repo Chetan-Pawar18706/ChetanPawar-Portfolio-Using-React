@@ -9,11 +9,15 @@ A personal portfolio built with React.js and Framer Motion showcasing projects, 
 3. Start API and frontend together: `npm run dev:full`.  
 4. Admin panel: `http://localhost:5173/admin/login`.
 
-Important: Do NOT commit `.env` or any secret keys to source control. Configure the following in your local `.env`:
-- MONGODB_URI
-- JWT_SECRET
-- ADMIN_EMAIL / ADMIN_PASSWORD
-- VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, VITE_EMAILJS_PUBLIC_KEY (if using EmailJS)
+Important: Do NOT commit `.env` or any secret keys to source control. Use local environment files for development and production configuration.
+
+Configure the following values in `.env`, `.env.local`, or `.env.production` as appropriate:
+- `MONGODB_URI`
+- `JWT_SECRET`
+- `ADMIN_EMAIL` / `ADMIN_PASSWORD`
+- `VITE_EMAILJS_SERVICE_ID`, `VITE_EMAILJS_TEMPLATE_ID`, `VITE_EMAILJS_PUBLIC_KEY` (if using EmailJS)
+- `VITE_API_URL` (`http://localhost:5000/api` for local development, `/api` for production builds)
+- `CLIENT_URL` (`http://localhost:5173` for local development, your Render app URL in production)
 
 If any secret was accidentally pushed, rotate/revoke it immediately and remove it from repo history.
 

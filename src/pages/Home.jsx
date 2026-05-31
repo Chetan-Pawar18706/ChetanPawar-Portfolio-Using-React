@@ -4,6 +4,7 @@ import "../CSS/Home.css"
 import '../index.css'
 
 import { byCategory, loadPageItems, toContactLinks } from '../lib/pageContent'
+import { buildAssetUrl } from '../config/api'
 
 export default function Home() {
   const [remoteItems, setRemoteItems] = React.useState([])
@@ -72,7 +73,7 @@ export default function Home() {
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 1 }}
               className="profile-photo"
-              src={hero?.image || ''}
+              src={buildAssetUrl(hero?.image)}
               alt={displayName}
             />
           </motion.div>

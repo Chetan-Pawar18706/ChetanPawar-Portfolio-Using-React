@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion'
 import { Github, ExternalLink } from 'lucide-react'
 import { apiFetch } from '../lib/api'
+import { buildAssetUrl } from '../config/api'
 
 
 export default function Projects() {
@@ -69,7 +70,7 @@ export default function Projects() {
             >
               <motion.div className="ss" whileHover={{ scale: 1.05 }} style={{ borderRadius: 12, overflow: 'hidden' }}>
                 <img
-                  src={p.image || p.ss}
+                  src={buildAssetUrl(p.image || p.ss)}
                   alt={p.title}
                   style={{
                     width: '100%',

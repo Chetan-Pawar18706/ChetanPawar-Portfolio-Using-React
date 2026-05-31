@@ -4,8 +4,7 @@ const { connectDB } = require("./db");
 const Project = require("./models/Project");
 const { pageModels } = require("./models/PageContent");
 
-const API_ORIGIN = process.env.API_ORIGIN || `http://localhost:${process.env.PORT || 5000}`;
-const asset = (name) => `${API_ORIGIN}/assets/${name}`;
+const asset = (name) => `/assets/${name}`;
 
 const projectSeeds = [
   {

@@ -9,6 +9,8 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: VITE_API_URL
+        value: /api
       - key: CLIENT_URL
         value: https://chetanpawar-portfolio-using-react.onrender.com
       - key: MONGO_URI

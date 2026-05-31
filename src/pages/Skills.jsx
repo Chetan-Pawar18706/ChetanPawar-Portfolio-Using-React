@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import "./Skills.css";
 import { byCategory, loadPageItems } from "../lib/pageContent";
+import { buildAssetUrl } from "../config/api";
 
 export default function Skills() {
   const stageRef = useRef();
@@ -16,7 +17,7 @@ export default function Skills() {
   }, []);
 
   const section = byCategory(remoteItems, "section")[0];
-  const skills = byCategory(remoteItems, "skill").map((item) => ({ name: item.title, logo: item.image }));
+  const skills = byCategory(remoteItems, "skill").map((item) => ({ name: item.title, logo: buildAssetUrl(item.image) }));
   const groups = byCategory(remoteItems, "group")
     .map((item) => ({ title: item.title, items: item.items }))
     .reduce((rows, group, index) => {

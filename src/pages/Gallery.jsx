@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import "../CSS/Gallery.css";
 import { byCategory, loadPageItems } from "../lib/pageContent";
 import { apiFetch } from "../lib/api";
+import { buildAssetUrl } from "../config/api";
 
 const pageVariants = {
   hidden: { opacity: 0, y: 40 },
@@ -47,7 +48,7 @@ export default function Gallery() {
               groups[category].push({
                 id: item._id,
                 caption: item.text || item.title,
-                photos: item.items.length ? item.items : [item.image].filter(Boolean),
+                photos: item.items.length ? item.items.map(buildAssetUrl) : [buildAssetUrl(item.image)].filter(Boolean),
               });
               return groups;
             },
@@ -69,7 +70,7 @@ export default function Gallery() {
   const projectGalleryItems = projects.map((project) => ({
     id: project._id,
     caption: project.desc || project.title,
-    photos: [project.image].filter(Boolean),
+    photos: [buildAssetUrl(project.image)].filter(Boolean),
   }));
   const images = {
     ...(remoteImages || { personal: [], projects: [], achievements: [] }),
@@ -118,7 +119,7 @@ export default function Gallery() {
               <div className={`photo-grid ${post.photos.length > 1 ? "multi" : "single"}`}>
                 {post.photos.map((src, i) => (
                   <motion.div key={i} className="photo-item" whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 250 }} onClick={() => openZoom(post, i)}>
-                    <img src={src} alt="gallery" />
+                    <img src={buildAssetUrl(src)} alt="gallery" />
                   </motion.div>
                 ))}
               </div>
@@ -141,7 +142,7 @@ export default function Gallery() {
           >
             <motion.img
               key={zoom.img}
-              src={zoom.img}
+              src={buildAssetUrl(zoom.img)}
               alt="zoom"
               className="zoom-img"
               initial={{ scale: 0.9, opacity: 0 }}

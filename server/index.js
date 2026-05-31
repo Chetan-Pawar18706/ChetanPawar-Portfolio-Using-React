@@ -16,15 +16,10 @@ const port = process.env.PORT || 5000;
 const environment = process.env.NODE_ENV || "development";
 const isProduction = environment === "production";
 
-const allowedOrigins = [
-  "https://chetanpawar-portfolio-using-react.onrender.com",
-  "http://localhost:5173",
-  "http://localhost:3000",
-  ...(process.env.CLIENT_URL || "")
-    .split(",")
-    .map((origin) => origin.trim())
-    .filter(Boolean),
-];
+const allowedOrigins = (process.env.CLIENT_URL || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 const loadedRoutes = [
   "GET /",

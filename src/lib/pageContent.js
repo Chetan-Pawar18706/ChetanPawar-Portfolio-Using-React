@@ -1,4 +1,5 @@
 import { apiFetch } from "./api";
+import { buildAssetUrl } from "../config/api";
 
 export async function loadPageItems(slug) {
   const data = await apiFetch(`/pages/${slug}`);
@@ -13,7 +14,7 @@ export function toContactLinks(items) {
   return byCategory(items, "link")
     .map((item) => ({
       id: item._id || `${item.title}-${item.url}`,
-      img: item.image,
+      img: buildAssetUrl(item.image),
       title: item.title,
       link: item.url || "#",
     }))

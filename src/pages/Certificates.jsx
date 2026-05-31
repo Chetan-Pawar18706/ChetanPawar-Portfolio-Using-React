@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { byCategory, loadPageItems } from "../lib/pageContent";
+import { buildAssetUrl } from "../config/api";
 
 export default function Certificates() {
   const [tab, setTab] = useState("tech");
@@ -103,7 +104,7 @@ export default function Certificates() {
                 transition={{ duration: 0.4 }}
                 style={{ background: "#1a1a1a", borderRadius: 12, padding: 16, color: "#fff", textDecoration: "none" }}
               >
-                {cert.image && <img src={cert.image} alt={cert.title} style={{ width: "100%", height: 170, objectFit: "cover", borderRadius: 8, marginBottom: 12 }} />}
+                {cert.image && <img src={buildAssetUrl(cert.image)} alt={cert.title} style={{ width: "100%", height: 170, objectFit: "cover", borderRadius: 8, marginBottom: 12 }} />}
                 <strong style={{ fontSize: 16 }}>{cert.title}</strong>
                 {cert.text && <div className="muted" style={{ fontSize: 13, color: "#bbb", marginTop: 8 }}>{cert.text}</div>}
               </motion.a>
