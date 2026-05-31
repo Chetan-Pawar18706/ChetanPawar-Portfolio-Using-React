@@ -99,7 +99,7 @@ app.use("/api/pages", pageRoutes);
 app.use("/api/messages", messageRoutes);
 
 if (isProduction) {
-  app.get("*", (req, res, next) => {
+  app.get("/*", (req, res, next) => {
     if (req.method !== "GET" || req.originalUrl.startsWith("/api")) {
       return next();
     }
