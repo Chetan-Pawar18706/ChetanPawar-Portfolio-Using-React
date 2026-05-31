@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const connectDb = require("./db");
+const { connectDB } = require("./db");
 const Project = require("./models/Project");
 const { pageModels } = require("./models/PageContent");
 
@@ -187,7 +187,7 @@ async function seedCollection(name, Model, docs) {
 }
 
 async function seedContent() {
-  await connectDb();
+  await connectDB();
 
   await seedCollection("projects", Project, projectSeeds);
 

@@ -4,6 +4,10 @@ const requireAdmin = require("../middleware/auth");
 
 const router = express.Router();
 
+function asyncHandler(handler) {
+  return (req, res, next) => Promise.resolve(handler(req, res, next)).catch(next);
+}
+
 function normalizeProject(body) {
   return {
     title: body.title,
@@ -21,18 +25,18 @@ function normalizeProject(body) {
   };
 }
 
-router.get("/", async (req, res) => {
+router.get("/", asyncHandler(async (req, res) => {
   const filter = req.query.all === "true" ? {} : { published: true };
   const projects = await Project.find(filter).sort({ createdAt: -1 });
   res.json(projects);
-});
+}));
 
-router.post("/", requireAdmin, async (req, res) => {
+router.post("/", requireAdmin, asyncHandler(async (req, res) => {
   const project = await Project.create(normalizeProject(req.body));
   res.status(201).json(project);
-});
+}));
 
-router.put("/:id", requireAdmin, async (req, res) => {
+router.put("/:id", requireAdmin, asyncHandler(async (req, res) => {
   const project = await Project.findByIdAndUpdate(req.params.id, normalizeProject(req.body), {
     new: true,
     runValidators: true,
@@ -43,15 +47,15 @@ router.put("/:id", requireAdmin, async (req, res) => {
   }
 
   res.json(project);
-});
+}));
 
-router.delete("/:id", requireAdmin, async (req, res) => {
+router.delete("/:id", requireAdmin, asyncHandler(async (req, res) => {
   const project = await Project.findByIdAndDelete(req.params.id);
   if (!project) {
     return res.status(404).json({ message: "Project not found" });
   }
 
   res.json({ message: "Project deleted" });
-});
+}));
 
 module.exports = router;

@@ -6,7 +6,11 @@ const requireAdmin = require("../middleware/auth");
 
 const router = express.Router();
 
-router.post("/login", async (req, res) => {
+function asyncHandler(handler) {
+  return (req, res, next) => Promise.resolve(handler(req, res, next)).catch(next);
+}
+
+router.post("/login", asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -30,7 +34,7 @@ router.post("/login", async (req, res) => {
   );
 
   return res.json({ token, admin: { email: admin.email } });
-});
+}));
 
 router.get("/me", requireAdmin, (req, res) => {
   res.json({ admin: req.admin });

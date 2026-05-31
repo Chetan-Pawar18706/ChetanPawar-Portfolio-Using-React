@@ -1,13 +1,13 @@
 require('dotenv').config();
 
-const connectDb = require('./db');
+const { connectDB } = require('./db');
 const { pageModels } = require('./models/PageContent');
 
 const API_ORIGIN = process.env.API_ORIGIN || `http://localhost:${process.env.PORT || 5000}`;
 const asset = (name) => `${API_ORIGIN}/assets/${name}`;
 
 async function addItems() {
-  await connectDb();
+  await connectDB();
   const Model = pageModels['resume'];
   if (!Model) {
     console.error('resume model not found');
