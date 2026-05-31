@@ -1,5 +1,5 @@
 import { apiFetch } from "./api";
-import { buildAssetUrl } from "../config/api";
+import { buildAssetUrl, buildPublicUrl } from "../config/api";
 
 export async function loadPageItems(slug) {
   const data = await apiFetch(`/pages/${slug}`);
@@ -16,7 +16,7 @@ export function toContactLinks(items) {
       id: item._id || `${item.title}-${item.url}`,
       img: buildAssetUrl(item.image),
       title: item.title,
-      link: item.url || "#",
+      link: buildPublicUrl(item.url || "#"),
     }))
     .filter((item) => item.title && item.link);
 }

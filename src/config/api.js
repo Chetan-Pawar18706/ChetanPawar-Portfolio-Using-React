@@ -29,6 +29,17 @@ function normalizeRelativePath(path) {
   return `/${normalized.replace(/^\/+/, "")}`;
 }
 
+function normalizePublicUrl(source) {
+  const trimmed = String(source || "").trim();
+  if (!trimmed) return "";
+
+  if (/^(https?:|data:|mailto:|tel:|\/\/|#)/i.test(trimmed)) {
+    return trimmed;
+  }
+
+  return trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+}
+
 export const API_URL = normalizeApiUrl(import.meta.env.VITE_API_URL);
 
 export function buildApiUrl(path) {
@@ -36,12 +47,9 @@ export function buildApiUrl(path) {
 }
 
 export function buildAssetUrl(source) {
-  const trimmed = String(source || "").trim();
-  if (!trimmed) return "";
+  return normalizePublicUrl(source);
+}
 
-  if (/^(https?:|data:|mailto:|tel:|\/\/)/i.test(trimmed)) {
-    return trimmed;
-  }
-
-  return trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+export function buildPublicUrl(source) {
+  return normalizePublicUrl(source);
 }

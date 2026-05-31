@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { byCategory, loadPageItems } from "../lib/pageContent";
-import { buildAssetUrl } from "../config/api";
+import { buildAssetUrl, buildPublicUrl } from "../config/api";
 
 export default function Certificates() {
   const [tab, setTab] = useState("tech");
@@ -94,7 +94,7 @@ export default function Certificates() {
             {certs[tab].map((cert) => (
               <motion.a
                 key={cert._id || cert.title}
-                href={cert.url || cert.image || "#"}
+                href={buildPublicUrl(cert.url || cert.image || "#")}
                 target="_blank"
                 rel="noreferrer"
                 className="cert card"

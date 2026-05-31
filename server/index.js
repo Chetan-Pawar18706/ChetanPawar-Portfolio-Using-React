@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
+const fs = require("fs");
 const path = require("path");
 
 const { connectDB, getMongoStatus } = require("./db");
@@ -14,6 +15,9 @@ const app = express();
 
 const port = process.env.PORT || 5000;
 const environment = process.env.NODE_ENV || "development";
+const projectRoot = path.resolve(__dirname, "..");
+const distPath = path.join(projectRoot, "dist");
+const hasFrontendBuild = fs.existsSync(path.join(distPath, "index.html"));
 const isProduction = environment === "production";
 
 const allowedOrigins = (process.env.CLIENT_URL || "")
@@ -67,14 +71,29 @@ app.options(/.*/, cors(corsOptions));
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 
-app.use(
-  "/assets",
-  express.static(path.join(__dirname, "..", "assets"))
-);
+const assetPaths = [
+  path.join(projectRoot, "assets"),
+  path.join(process.cwd(), "assets"),
+  path.join(distPath, "assets"),
+].filter((assetPath) => fs.existsSync(assetPath));
 
-const distPath = path.join(__dirname, "..", "dist");
+if (assetPaths.length === 0) {
+  console.warn(
+    "WARNING: No /assets directory was found for static asset serving. Checked:",
+    [
+      path.join(projectRoot, "assets"),
+      path.join(process.cwd(), "assets"),
+      path.join(distPath, "assets"),
+    ].join(", ")
+  );
+} else {
+  assetPaths.forEach((assetPath) => {
+    console.log(`Serving /assets from: ${assetPath}`);
+    app.use("/assets", express.static(assetPath));
+  });
+}
 
-if (isProduction) {
+if (hasFrontendBuild) {
   app.use(express.static(distPath));
 }
 
@@ -83,7 +102,7 @@ if (isProduction) {
 ---------------------------- */
 
 app.get("/", (req, res) => {
-  if (isProduction) {
+  if (hasFrontendBuild) {
     return res.sendFile(path.join(distPath, "index.html"));
   }
 
@@ -128,7 +147,7 @@ app.use("/api/messages", messageRoutes);
    Express 5 Compatible
 ---------------------------- */
 
-if (isProduction) {
+if (hasFrontendBuild) {
   app.use((req, res, next) => {
     if (
       req.method !== "GET" ||

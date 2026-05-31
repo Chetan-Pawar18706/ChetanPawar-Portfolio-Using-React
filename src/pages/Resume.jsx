@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { byCategory, loadPageItems, toContactLinks } from "../lib/pageContent";
 import { apiFetch } from "../lib/api";
+import { buildPublicUrl } from "../config/api";
 
 export default function Resume() {
   const [remoteItems, setRemoteItems] = React.useState([]);
@@ -35,7 +36,7 @@ export default function Resume() {
   const remoteSkills = byCategory(remoteItems, "skill").flatMap((item) => (item.items?.length ? item.items : [item.title || item.text])).filter(Boolean);
   const education = byCategory(remoteItems, "education");
   const experience = byCategory(remoteItems, "experience");
-  const pdf = byCategory(remoteItems, "pdf")[0]?.url;
+  const pdf = buildPublicUrl(byCategory(remoteItems, "pdf")[0]?.url);
   const hasRemoteProjects = remoteProjects.length > 0;
   const hasRemoteSkills = remoteSkills.length > 0;
   const hasRemoteEducation = education.length > 0;

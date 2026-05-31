@@ -9,6 +9,7 @@
     "dev:full": "concurrently \"npm run server\" \"npm run dev\"",
     "seed:admin": "node server/seedAdmin.js",
     "seed:content": "node server/seedContent.js",
+    "migrate:assets": "node server/migrateAssetUrls.js",
     "build": "vite build",
     "preview": "vite preview"
   },
