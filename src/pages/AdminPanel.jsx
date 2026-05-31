@@ -175,6 +175,70 @@ export default function AdminPanel() {
     }
   }
 
+  async function uploadAsset(file) {
+    const formData = new FormData();
+    formData.append("file", file);
+    const data = await apiFetch("/upload", { method: "POST", body: formData });
+    return data.url;
+  }
+
+  async function uploadProjectImage(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setLoading(true);
+    setStatus("");
+
+    try {
+      const url = await uploadAsset(file);
+      setProjectForm((current) => ({ ...current, image: url }));
+      setStatus("Project image uploaded.");
+    } catch (error) {
+      setStatus(error.message);
+    } finally {
+      setLoading(false);
+      event.target.value = "";
+    }
+  }
+
+  async function uploadPageImage(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setLoading(true);
+    setStatus("");
+
+    try {
+      const url = await uploadAsset(file);
+      setPageForm((current) => ({ ...current, image: url }));
+      setStatus("Image uploaded.");
+    } catch (error) {
+      setStatus(error.message);
+    } finally {
+      setLoading(false);
+      event.target.value = "";
+    }
+  }
+
+  async function uploadPageUrlFile(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setLoading(true);
+    setStatus("");
+
+    try {
+      const url = await uploadAsset(file);
+      setPageForm((current) => ({ ...current, url }));
+      setStatus("File URL uploaded.");
+    } catch (error) {
+      setStatus(error.message);
+    } finally {
+      setLoading(false);
+      event.target.value = "";
+    }
+  }
+
   async function deleteProject(id) {
     if (!window.confirm("Delete this project?")) return;
     try {
@@ -255,6 +319,7 @@ export default function AdminPanel() {
           }}
           onDelete={deleteProject}
           onCancel={resetForms}
+          onUploadImage={uploadProjectImage}
         />
       ) : managingMessages ? (
         <MessageManager
@@ -279,13 +344,15 @@ export default function AdminPanel() {
           }}
           onDelete={deletePageItem}
           onCancel={resetForms}
+          onUploadImage={uploadPageImage}
+          onUploadFile={uploadPageUrlFile}
         />
       )}
     </section>
   );
 }
 
-function ProjectManager({ form, setForm, projects, isEditing, loading, status, onSubmit, onEdit, onDelete, onCancel }) {
+function ProjectManager({ form, setForm, projects, isEditing, loading, status, onSubmit, onEdit, onDelete, onCancel, onUploadImage }) {
   const update = (name, value) => setForm((current) => ({ ...current, [name]: value }));
 
   return (
@@ -295,6 +362,7 @@ function ProjectManager({ form, setForm, projects, isEditing, loading, status, o
         <label>Title<input value={form.title} onChange={(event) => update("title", event.target.value)} required /></label>
         <label>Description<textarea value={form.desc} onChange={(event) => update("desc", event.target.value)} rows="5" required /></label>
         <label>Image URL<input value={form.image} onChange={(event) => update("image", event.target.value)} placeholder="https://... or /image.png" required /></label>
+        <label className="admin-file">Upload image<input type="file" accept="image/*" onChange={onUploadImage} /></label>
         <label>Technologies<input value={form.tech} onChange={(event) => update("tech", event.target.value)} placeholder="React, MongoDB, Express" /></label>
         <div className="admin-row">
           <label>Live URL<input value={form.live} onChange={(event) => update("live", event.target.value)} /></label>
@@ -320,7 +388,7 @@ function ProjectManager({ form, setForm, projects, isEditing, loading, status, o
   );
 }
 
-function PageManager({ activePage, form, setForm, items, isEditing, loading, status, onSubmit, onEdit, onDelete, onCancel }) {
+function PageManager({ activePage, form, setForm, items, isEditing, loading, status, onSubmit, onEdit, onDelete, onCancel, onUploadImage, onUploadFile }) {
   const update = (name, value) => setForm((current) => ({ ...current, [name]: value }));
 
   return (
@@ -335,7 +403,9 @@ function PageManager({ activePage, form, setForm, items, isEditing, loading, sta
         <label>Title<input value={form.title} onChange={(event) => update("title", event.target.value)} placeholder="Heading, skill name, link label..." /></label>
         <label>Text<textarea value={form.text} onChange={(event) => update("text", event.target.value)} rows="5" placeholder="Paragraph, caption, description..." /></label>
         <label>Image URL<input value={form.image} onChange={(event) => update("image", event.target.value)} placeholder="https://... or /image.png" /></label>
+        <label className="admin-file">Upload image<input type="file" accept="image/*" onChange={onUploadImage} /></label>
         <label>Link URL<input value={form.url} onChange={(event) => update("url", event.target.value)} placeholder="https://..., mailto:..., /resume.pdf" /></label>
+        <label className="admin-file">Upload file<input type="file" accept="application/pdf" onChange={onUploadFile} /></label>
         <label>Items<input value={form.items} onChange={(event) => update("items", event.target.value)} placeholder="Comma separated list, gallery images, skills, lines..." /></label>
         <label className="admin-check"><input type="checkbox" checked={form.published} onChange={(event) => update("published", event.target.checked)} /> Published</label>
         <FormActions isEditing={isEditing} loading={loading} onCancel={onCancel} />

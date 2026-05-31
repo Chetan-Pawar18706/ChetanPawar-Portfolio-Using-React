@@ -32,17 +32,25 @@ function normalizeRelativePath(path) {
 function normalizePublicUrl(source) {
   const trimmed = String(source || "").trim();
   if (!trimmed) return "";
-
   const localUrlMatch = trimmed.match(/^(https?:)\/\/(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])(?::\d+)?(\/.*)?$/i);
   if (localUrlMatch) {
     return localUrlMatch[3] || "/";
   }
 
+  // preserve absolute/special protocols
   if (/^(https?:|data:|mailto:|tel:|\/\/|#)/i.test(trimmed)) {
     return trimmed;
   }
 
-  return trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+  // If a Vite-provided client base is set, prefix root-relative paths with it
+  const clientBase = String(import.meta.env.VITE_CLIENT_URL || "").trim().replace(/\/+$/, "");
+  const normalized = trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+
+  if (clientBase) {
+    return `${clientBase}${normalized}`;
+  }
+
+  return normalized;
 }
 
 export const API_URL = normalizeApiUrl(import.meta.env.VITE_API_URL);

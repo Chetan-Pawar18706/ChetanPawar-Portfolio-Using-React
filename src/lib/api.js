@@ -17,13 +17,14 @@ export function clearToken() {
 export async function apiFetch(path, options = {}) {
   const token = getToken();
   const url = buildApiUrl(path);
+  const isFormData = options.body instanceof FormData;
 
   const response = await fetch(url, {
     ...options,
     headers: {
-      "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(options.headers || {}),
+      ...(isFormData ? {} : { "Content-Type": "application/json" }),
     },
   });
 
