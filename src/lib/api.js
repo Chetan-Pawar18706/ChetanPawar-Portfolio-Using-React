@@ -1,10 +1,37 @@
 function normalizeApiUrl(url) {
-  return String(url || "http://localhost:5000/api")
-    .replace(/\/+$/, "")
-    .replace(/\/projects$/, "");
+  const fallbackUrl = import.meta.env.PROD
+    ? "https://portfolio-backend.onrender.com/api"
+    : "http://localhost:5000/api";
+  const rawUrl = String(url || fallbackUrl).trim();
+
+  try {
+    const parsedUrl = new URL(rawUrl);
+    const pathParts = parsedUrl.pathname.split("/").filter(Boolean);
+    const apiIndex = pathParts.indexOf("api");
+
+    if (apiIndex >= 0) {
+      parsedUrl.pathname = `/${pathParts.slice(0, apiIndex + 1).join("/")}`;
+    } else {
+      parsedUrl.pathname = `${parsedUrl.pathname.replace(/\/+$/, "")}/api`;
+    }
+
+    parsedUrl.search = "";
+    parsedUrl.hash = "";
+    return parsedUrl.toString().replace(/\/+$/, "");
+  } catch {
+    return rawUrl
+      .replace(/\/+$/, "")
+      .replace(/\/projects$/, "")
+      .replace(/\/pages\/[^/]+(?:\/pages\/[^/]+)*$/, "");
+  }
 }
 
-const API_URL = normalizeApiUrl(import.meta.env.VITE_API_URL);
+const configuredApiUrl = import.meta.env.VITE_API_URL;
+const API_URL = normalizeApiUrl(
+  import.meta.env.PROD && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?/i.test(configuredApiUrl || "")
+    ? ""
+    : configuredApiUrl
+);
 const TOKEN_KEY = "portfolio_admin_token";
 
 export function getToken() {
@@ -21,7 +48,8 @@ export function clearToken() {
 
 export async function apiFetch(path, options = {}) {
   const token = getToken();
-  const response = await fetch(`${API_URL}${path}`, {
+  const normalizedPath = `/${String(path || "").replace(/^\/+/, "")}`;
+  const response = await fetch(`${API_URL}${normalizedPath}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",
