@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { CheckCircle2, LogOut, Mail, MessageCircle, Phone, Plus, Save, Trash2 } from "lucide-react";
 import { apiFetch, clearToken, getToken } from "../lib/api";
+import { buildAssetUrl } from "../config/api";
 import "./Admin.css";
 
 const blankProject = {
@@ -308,7 +309,7 @@ function ProjectManager({ form, setForm, projects, isEditing, loading, status, o
         <h3>Projects</h3>
         {projects.map((project) => (
           <div className="admin-project" key={project._id}>
-            <img src={project.image} alt={project.title} />
+            <img src={buildAssetUrl(project.image)} alt={project.title} />
             <div><h4>{project.title}</h4><p>{project.published ? "Published" : "Hidden"}</p></div>
             <button className="admin-secondary" type="button" onClick={() => onEdit(project)}>Edit</button>
             <button className="admin-danger" type="button" onClick={() => onDelete(project._id)}><Trash2 size={16} /></button>
@@ -348,7 +349,7 @@ function PageManager({ activePage, form, setForm, items, isEditing, loading, sta
         ) : (
           items.map((item) => (
             <div className="admin-content-item" key={item._id}>
-              {item.image && <img src={item.image} alt={item.title || item.category} />}
+              {item.image && <img src={buildAssetUrl(item.image)} alt={item.title || item.category} />}
               <div>
                 <span>{item.category} {item.published ? "" : "(hidden)"}</span>
                 <h4>{item.title || "Untitled"}</h4>
