@@ -3,7 +3,7 @@ services:
     name: portfolio-backend
     runtime: node
     plan: free
-    buildCommand: npm install
+    buildCommand: npm install --include=dev && npm run build
     startCommand: npm start
     healthCheckPath: /health
     envVars:

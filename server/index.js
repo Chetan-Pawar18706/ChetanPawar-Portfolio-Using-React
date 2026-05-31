@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+
 const { connectDB, getMongoStatus } = require("./db");
 const authRoutes = require("./routes/auth");
 const projectRoutes = require("./routes/projects");
@@ -10,8 +11,11 @@ const pageRoutes = require("./routes/pages");
 const messageRoutes = require("./routes/messages");
 
 const app = express();
+
 const port = process.env.PORT || 5000;
 const environment = process.env.NODE_ENV || "development";
+const isProduction = environment === "production";
+
 const allowedOrigins = [
   "https://chetanpawar-portfolio-using-react.onrender.com",
   "http://localhost:5173",
@@ -21,6 +25,7 @@ const allowedOrigins = [
     .map((origin) => origin.trim())
     .filter(Boolean),
 ];
+
 const loadedRoutes = [
   "GET /",
   "GET /health",
@@ -48,7 +53,10 @@ const corsOptions = {
       return callback(null, true);
     }
 
-    return callback(null, false);
+    return callback(
+      new Error(`CORS blocked for origin: ${origin}`),
+      false
+    );
   },
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -57,17 +65,27 @@ const corsOptions = {
 };
 
 app.disable("x-powered-by");
+
 app.use(cors(corsOptions));
 app.options(/.*/, cors(corsOptions));
+
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true, limit: "1mb" }));
-app.use("/assets", express.static(path.join(__dirname, "..", "assets")));
+
+app.use(
+  "/assets",
+  express.static(path.join(__dirname, "..", "assets"))
+);
 
 const distPath = path.join(__dirname, "..", "dist");
-const isProduction = environment === "production";
+
 if (isProduction) {
   app.use(express.static(distPath));
 }
+
+/* ---------------------------
+   Basic Routes
+---------------------------- */
 
 app.get("/", (req, res) => {
   if (isProduction) {
@@ -77,6 +95,7 @@ app.get("/", (req, res) => {
   return res.status(200).json({
     status: "ok",
     service: "portfolio-backend",
+    environment,
     health: "/health",
     pages: {
       home: "/api/pages/home",
@@ -86,27 +105,51 @@ app.get("/", (req, res) => {
 });
 
 app.get("/health", (req, res) => {
-  res.status(200).json({ status: "ok" });
+  res.status(200).json({
+    status: "ok",
+    uptime: process.uptime(),
+    environment,
+  });
 });
 
 app.get("/api/health", (req, res) => {
-  res.status(200).json({ status: "ok" });
+  res.status(200).json({
+    status: "ok",
+    database: getMongoStatus(),
+  });
 });
+
+/* ---------------------------
+   API Routes
+---------------------------- */
 
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/pages", pageRoutes);
 app.use("/api/messages", messageRoutes);
 
+/* ---------------------------
+   React SPA Fallback
+   Express 5 Compatible
+---------------------------- */
+
 if (isProduction) {
-  app.get("/*", (req, res, next) => {
-    if (req.method !== "GET" || req.originalUrl.startsWith("/api")) {
+  app.use((req, res, next) => {
+    if (
+      req.method !== "GET" ||
+      req.originalUrl.startsWith("/api") ||
+      req.originalUrl.startsWith("/assets")
+    ) {
       return next();
     }
 
     return res.sendFile(path.join(distPath, "index.html"));
   });
 }
+
+/* ---------------------------
+   404 Handler
+---------------------------- */
 
 app.use((req, res) => {
   res.status(404).json({
@@ -115,41 +158,88 @@ app.use((req, res) => {
   });
 });
 
+/* ---------------------------
+   Global Error Handler
+---------------------------- */
+
 app.use((error, req, res, next) => {
-  const status = error.status || error.statusCode || (error.name === "ValidationError" ? 400 : 500);
+  const status =
+    error.status ||
+    error.statusCode ||
+    (error.name === "ValidationError" ? 400 : 500);
 
   if (error.name === "CastError") {
-    return res.status(400).json({ message: "Invalid resource id" });
+    return res.status(400).json({
+      message: "Invalid resource id",
+    });
   }
 
-  console.error(`${req.method} ${req.originalUrl} failed: ${error.message}`);
+  console.error(
+    `${req.method} ${req.originalUrl} failed:`,
+    error
+  );
+
   return res.status(status).json({
-    message: status >= 500 ? "Internal server error" : error.message,
+    message:
+      status >= 500
+        ? "Internal server error"
+        : error.message,
   });
 });
 
+/* ---------------------------
+   Startup Logging
+---------------------------- */
+
 function logStartup(dbStatus) {
+  console.log("================================");
   console.log(`Environment: ${environment}`);
-  console.log(`Server port: ${port}`);
-  console.log(`MongoDB status: ${dbStatus.connected ? "connected" : "not connected"} (${dbStatus.database || dbStatus.reason || getMongoStatus().state})`);
-  console.log(`Allowed CORS origins: ${allowedOrigins.join(", ")}`);
-  console.log(`Loaded routes: ${loadedRoutes.join(", ")}`);
+  console.log(`Server Port: ${port}`);
+  console.log(
+    `MongoDB Status: ${
+      dbStatus.connected ? "CONNECTED" : "NOT CONNECTED"
+    }`
+  );
+  console.log(
+    `Database: ${
+      dbStatus.database ||
+      dbStatus.reason ||
+      getMongoStatus().state
+    }`
+  );
+  console.log(
+    `Allowed Origins: ${allowedOrigins.join(", ")}`
+  );
+  console.log(`Routes Loaded: ${loadedRoutes.length}`);
+  console.log("================================");
 }
 
-async function startServer() {
-  const dbStatus = await connectDB();
+/* ---------------------------
+   Start Server
+---------------------------- */
 
-  app.listen(port, () => {
-    logStartup(dbStatus);
-    console.log(`API running at http://localhost:${port}`);
-  });
+async function startServer() {
+  try {
+    const dbStatus = await connectDB();
+
+    app.listen(port, () => {
+      logStartup(dbStatus);
+
+      console.log(
+        `🚀 Server running on port ${port}`
+      );
+    });
+  } catch (error) {
+    console.error(
+      "Failed to start API:",
+      error.message
+    );
+    process.exit(1);
+  }
 }
 
 if (require.main === module) {
-  startServer().catch((error) => {
-    console.error("Failed to start API:", error.message);
-    process.exit(1);
-  });
+  startServer();
 }
 
 module.exports = {
