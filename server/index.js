@@ -24,18 +24,7 @@ const allowedOrigins = [
     .split(",")
     .map((origin) => origin.trim())
     .filter(Boolean),
-].map((o) => String(o).replace(/\/+$/, "").toLowerCase());
-
-// Helper to check origin against the allowed list
-function isOriginAllowed(origin) {
-  if (!origin) return true; // allow non-browser/server-to-server
-  try {
-    const normalized = String(origin).replace(/\/+$/, "").toLowerCase();
-    return allowedOrigins.includes(normalized);
-  } catch {
-    return false;
-  }
-}
+];
 
 const loadedRoutes = [
   "GET /",
@@ -60,8 +49,14 @@ const loadedRoutes = [
 
 const corsOptions = {
   origin(origin, callback) {
-    if (isOriginAllowed(origin)) return callback(null, true);
-    return callback(null, false);
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(
+      new Error(`CORS blocked for origin: ${origin}`),
+      false
+    );
   },
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -71,14 +66,8 @@ const corsOptions = {
 
 app.disable("x-powered-by");
 
-// Apply global CORS and ensure preflight is supported for all paths
-app.use((req, res, next) => {
-  res.setHeader("Vary", "Origin");
-  next();
-});
-
 app.use(cors(corsOptions));
-app.options("/*", cors(corsOptions));
+app.options(/.*/, cors(corsOptions));
 
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true, limit: "1mb" }));
@@ -134,38 +123,10 @@ app.get("/api/health", (req, res) => {
    API Routes
 ---------------------------- */
 
-// Mount APIs under a single router so we can guarantee CORS headers are present
-const apiRouter = express.Router();
-
-// Ensure every API response includes explicit CORS headers when origin allowed
-apiRouter.use((req, res, next) => {
-  const origin = req.get("origin");
-
-  if (isOriginAllowed(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin || "");
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader(
-      "Access-Control-Allow-Headers",
-      "Content-Type, Authorization"
-    );
-    res.setHeader(
-      "Access-Control-Allow-Methods",
-      "GET,POST,PUT,PATCH,DELETE,OPTIONS"
-    );
-  }
-
-  next();
-});
-
-// Preflight responder for API routes
-apiRouter.options("/*", (req, res) => res.sendStatus(204));
-
-apiRouter.use("/auth", authRoutes);
-apiRouter.use("/projects", projectRoutes);
-apiRouter.use("/pages", pageRoutes);
-apiRouter.use("/messages", messageRoutes);
-
-app.use("/api", apiRouter);
+app.use("/api/auth", authRoutes);
+app.use("/api/projects", projectRoutes);
+app.use("/api/pages", pageRoutes);
+app.use("/api/messages", messageRoutes);
 
 /* ---------------------------
    React SPA Fallback
