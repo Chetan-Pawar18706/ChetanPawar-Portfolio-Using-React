@@ -4,10 +4,16 @@ const { connectDB } = require("./db");
 const { pageModels } = require("./models/PageContent");
 
 const ABSOLUTE_OR_SPECIAL_URL = /^(https?:|data:|mailto:|tel:|\/\/|#)/i;
+const LOCAL_URL = /^(https?:)\/\/(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])(?::\d+)?(\/.*)?$/i;
 
 function normalizePublicUrl(source) {
   const trimmed = String(source || "").trim();
   if (!trimmed) return "";
+
+  const localMatch = trimmed.match(LOCAL_URL);
+  if (localMatch) {
+    return localMatch[3] || "/";
+  }
 
   if (ABSOLUTE_OR_SPECIAL_URL.test(trimmed) || trimmed.startsWith("/")) {
     return trimmed;

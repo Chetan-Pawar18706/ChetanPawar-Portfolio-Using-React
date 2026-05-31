@@ -33,6 +33,11 @@ function normalizePublicUrl(source) {
   const trimmed = String(source || "").trim();
   if (!trimmed) return "";
 
+  const localUrlMatch = trimmed.match(/^(https?:)\/\/(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])(?::\d+)?(\/.*)?$/i);
+  if (localUrlMatch) {
+    return localUrlMatch[3] || "/";
+  }
+
   if (/^(https?:|data:|mailto:|tel:|\/\/|#)/i.test(trimmed)) {
     return trimmed;
   }
