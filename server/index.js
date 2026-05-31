@@ -63,8 +63,18 @@ app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 app.use("/assets", express.static(path.join(__dirname, "..", "assets")));
 
+const distPath = path.join(__dirname, "..", "dist");
+const isProduction = environment === "production";
+if (isProduction) {
+  app.use(express.static(distPath));
+}
+
 app.get("/", (req, res) => {
-  res.status(200).json({
+  if (isProduction) {
+    return res.sendFile(path.join(distPath, "index.html"));
+  }
+
+  return res.status(200).json({
     status: "ok",
     service: "portfolio-backend",
     health: "/health",
@@ -87,6 +97,16 @@ app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/pages", pageRoutes);
 app.use("/api/messages", messageRoutes);
+
+if (isProduction) {
+  app.get("*", (req, res, next) => {
+    if (req.method !== "GET" || req.originalUrl.startsWith("/api")) {
+      return next();
+    }
+
+    return res.sendFile(path.join(distPath, "index.html"));
+  });
+}
 
 app.use((req, res) => {
   res.status(404).json({
