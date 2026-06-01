@@ -38,18 +38,15 @@ export default function Projects() {
     >
       <div className="card" style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 16, padding: 30 }}>
         <motion.h2
-          className="text-4xl font-semibold text-cyan-400 mb-2"
+          className="page-heading"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.1 }}
         >
           Projects
         </motion.h2>
-        <p className="text-gray-400 mb-10">
-          Project data is loaded from the database.
-        </p>
 
-        <div className="projects-grid" style={{ display: 'grid', gap: 24, gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))' }}>
+        <div className="projects-grid" style={{ display: 'grid', gap: 24, gridAutoRows: '1fr', width: '100%' }}>
           {projects.length > 0 ? projects.map((p, idx) => (
             <motion.div
               key={idx}

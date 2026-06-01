@@ -57,10 +57,10 @@ export default function Blog() {
 
   return (
     <motion.section className="blog-section" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
-      <motion.h2 className="blog-title" initial={{ y: -15, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6 }}>
+      <motion.h2 className="blog-title page-heading" initial={{ y: -15, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6 }}>
         {section?.title || "Blog"}
       </motion.h2>
-      <p className="blog-sub">{section?.text || "Blog content is loaded from the database."}</p>
+      {section?.text && <p className="blog-sub page-subtitle">{section.text}</p>}
 
       <div className="blog-grid">
         {posts.length > 0 ? posts.map((p, idx) => (

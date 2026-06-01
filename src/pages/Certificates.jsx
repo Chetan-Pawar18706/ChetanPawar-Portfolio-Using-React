@@ -38,10 +38,8 @@ export default function Certificates() {
   return (
     <section className="container" style={{ padding: "40px 0" }}>
       <div className="card" style={{ background: "#111", borderRadius: 12, padding: 24 }}>
-        <h2 style={{ fontSize: "1.8rem", color: "#fff", marginBottom: 4 }}>{section?.title || "Certificates"}</h2>
-        <p className="lead" style={{ color: "#aaa" }}>
-          {section?.text || "Certificate content is loaded from the database."}
-        </p>
+        <h2 className="page-heading">{section?.title || "Certificates"}</h2>
+        {section?.text && <p className="page-subtitle">{section.text}</p>}
 
         <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
           {["tech", "other"].map((t) => (

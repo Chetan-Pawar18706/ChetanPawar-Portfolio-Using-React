@@ -139,10 +139,15 @@
 
   .home-title {
     font-size: 2rem;
+    word-break: break-word;
   }
 
   .typing-effect {
     font-size: 1rem;
+    white-space: normal;
+    overflow: visible;
+    border-right: none;
+    animation: none;
   }
 
   .profession-tag {

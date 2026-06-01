@@ -50,10 +50,8 @@ const AboutMe = () => {
           backdropFilter: "blur(10px)",
         }}
       >
-        <h2
+        <h2 className="page-heading"
           style={{
-            fontSize: "1.9rem",
-            marginBottom: "1.2rem",
             background: "linear-gradient(90deg, var(--accent), var(--accent-2))",
             WebkitBackgroundClip: "text",
             color: "transparent",

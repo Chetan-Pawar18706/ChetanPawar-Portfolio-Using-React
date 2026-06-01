@@ -76,11 +76,13 @@ export default function Skills() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
       >
-        <h2 className="text-5xl text-cyan-400 font-semibold mb-3">{section?.title || "Skills"}</h2>
+        <h2 className="page-heading" style={{ color: "#06b6d4" }}>{section?.title || "Skills"}</h2>
         <div className="w-28 h-[2px] bg-cyan-400 mx-auto mb-6"></div>
-        <p className="text-gray-400 text-lg max-w-xl mx-auto">
-          {section?.text || "Skill content is loaded from the database."}
-        </p>
+        {section?.text && (
+          <p className="page-subtitle">
+            {section.text}
+          </p>
+        )}
       </motion.div>
 
       <motion.div

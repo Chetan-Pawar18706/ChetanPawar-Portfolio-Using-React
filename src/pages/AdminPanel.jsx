@@ -405,7 +405,9 @@ function PageManager({ activePage, form, setForm, items, isEditing, loading, sta
         <label>Image URL<input value={form.image} onChange={(event) => update("image", event.target.value)} placeholder="https://... or /image.png" /></label>
         <label className="admin-file">Upload image<input type="file" accept="image/*" onChange={onUploadImage} /></label>
         <label>Link URL<input value={form.url} onChange={(event) => update("url", event.target.value)} placeholder="https://..., mailto:..., /resume.pdf" /></label>
-        <label className="admin-file">Upload file<input type="file" accept="application/pdf" onChange={onUploadFile} /></label>
+        <label className="admin-file">Upload PDF (optional)
+          <input type="file" accept="application/pdf" onChange={onUploadFile} />
+        </label>
         <label>Items<input value={form.items} onChange={(event) => update("items", event.target.value)} placeholder="Comma separated list, gallery images, skills, lines..." /></label>
         <label className="admin-check"><input type="checkbox" checked={form.published} onChange={(event) => update("published", event.target.checked)} /> Published</label>
         <FormActions isEditing={isEditing} loading={loading} onCancel={onCancel} />

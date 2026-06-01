@@ -85,19 +85,21 @@ export default function Contact() {
         initial={{ opacity: 0, y: -15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
-        className="contact-title"
+        className="contact-title page-heading"
       >
         {content?.title || "Contact"}
       </motion.h1>
 
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3, duration: 0.8 }}
-        className="contact-subtitle"
-      >
-        {content?.text || "Contact content is loaded from the database."}
-      </motion.p>
+      {content?.text && (
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.8 }}
+          className="contact-subtitle page-subtitle"
+        >
+          {content.text}
+        </motion.p>
+      )}
 
       <motion.div className="contact-links">
         {quickLinks.length > 0 ? quickLinks.map((item, i) => (
