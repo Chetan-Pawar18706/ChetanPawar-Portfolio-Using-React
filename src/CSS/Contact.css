@@ -90,3 +90,49 @@
   color: #0ff;
   font-weight: 500;
 }
+
+@media (max-width: 900px) {
+  .contact-section {
+    padding: 2rem 1rem 3rem;
+  }
+
+  .contact-title {
+    font-size: 2.2rem;
+  }
+
+  .contact-subtitle {
+    max-width: 100%;
+  }
+
+  .contact-links {
+    gap: 16px;
+  }
+
+  .contact-form {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .contact-input,
+  .contact-form textarea {
+    font-size: 0.95rem;
+  }
+
+  .contact-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .contact-section {
+    padding: 1.5rem 0.85rem 2rem;
+  }
+
+  .contact-title {
+    font-size: 1.95rem;
+  }
+
+  .contact-subtitle {
+    font-size: 1rem;
+  }
+}

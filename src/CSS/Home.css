@@ -67,3 +67,95 @@
   gap: 1.5rem;
   justify-content: center; /* ensures icons are centered */
 }
+
+@media (max-width: 900px) {
+  .home-section {
+    padding: 2rem 1rem;
+  }
+
+  .home-top {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .photo-container {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 340px;
+  }
+
+  .photo-frame {
+    width: 280px;
+    height: 280px;
+  }
+
+  .home-info {
+    min-width: unset;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .home-title {
+    font-size: 2.3rem;
+  }
+
+  .typing-effect {
+    font-size: 1.05rem;
+  }
+
+  .profession-tags {
+    justify-content: center;
+  }
+
+  .info-cards {
+    width: 100%;
+  }
+
+  .info-card {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+
+  .quick-links-list {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-section {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .photo-frame {
+    width: 220px;
+    height: 220px;
+  }
+
+  .photo-ring {
+    width: 260px;
+    height: 260px;
+  }
+
+  .home-title {
+    font-size: 2rem;
+  }
+
+  .typing-effect {
+    font-size: 1rem;
+  }
+
+  .profession-tag {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+
+  .quick-links-list {
+    gap: 0.9rem;
+  }
+
+  .quick-link-img {
+    width: 44px;
+    height: 44px;
+  }
+}

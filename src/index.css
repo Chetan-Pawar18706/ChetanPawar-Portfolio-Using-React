@@ -364,20 +364,62 @@ body {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 24px
+    padding: 24px;
   }
 
   .hero-photo {
     width: 260px;
-    height: 260px
+    height: 260px;
+  }
+
+  .hero-intro {
+    max-width: 100%;
   }
 
   .gallery-grid {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr))
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+
+  .contact-section {
+    padding: 2rem 1rem 3rem;
+  }
+
+  .contact-form {
+    max-width: 100%;
   }
 
   .skills-stage {
-    height: 360px
+    height: 360px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-hero {
+    padding: 20px 16px;
+  }
+
+  .hero-photo {
+    width: 220px;
+    height: 220px;
+  }
+
+  .hero-intro {
+    width: 100%;
+  }
+
+  .projects-grid,
+  .gallery-grid,
+  .blog-grid,
+  .certs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-container,
+  .post-feed,
+  .blog-section,
+  .contact-section {
+    padding-left: 12px;
+    padding-right: 12px;
   }
 }
 
