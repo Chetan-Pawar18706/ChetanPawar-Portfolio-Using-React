@@ -38,7 +38,7 @@ export default function Certificates() {
   return (
     <section className="container" style={{ padding: "40px 0" }}>
       <div className="card" style={{ background: "#111", borderRadius: 12, padding: 24 }}>
-        <h2 className="page-heading">{section?.title || "Certificates"}</h2>
+        <h2 className="page-heading" style={{ color: "#00b4ff", marginBottom: 12 }}>{section?.title || "Certificates"}</h2>
         {section?.text && <p className="page-subtitle">{section.text}</p>}
 
         <div style={{ display: "flex", gap: 10, marginTop: 16 }}>

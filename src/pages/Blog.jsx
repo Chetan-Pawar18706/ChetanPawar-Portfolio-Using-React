@@ -57,7 +57,7 @@ export default function Blog() {
 
   return (
     <motion.section className="blog-section" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
-      <motion.h2 className="blog-title page-heading" initial={{ y: -15, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6 }}>
+      <motion.h2 className="blog-title page-heading" style={{ color: "#00b4ff", marginBottom: 12 }} initial={{ y: -15, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6 }}>
         {section?.title || "Blog"}
       </motion.h2>
       {section?.text && <p className="blog-sub page-subtitle">{section.text}</p>}

@@ -76,10 +76,10 @@ export default function Skills() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
       >
-        <h2 className="page-heading" style={{ color: "#06b6d4" }}>{section?.title || "Skills"}</h2>
+        <h2 className="page-heading" style={{ color: "#00b4ff", marginBottom: 12 }}>{section?.title || "Skills"}</h2>
         <div className="w-28 h-[2px] bg-cyan-400 mx-auto mb-6"></div>
         {section?.text && (
-          <p className="page-subtitle">
+          <p className="page-subtitle" >
             {section.text}
           </p>
         )}

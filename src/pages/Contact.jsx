@@ -5,7 +5,6 @@ import emailjs from "emailjs-com";
 
 
 import "../CSS/Contact.css"
-import '../index.css'
 import { apiFetch } from "../lib/api";
 import { byCategory, loadPageItems, toContactLinks } from "../lib/pageContent";
 
@@ -86,6 +85,7 @@ export default function Contact() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
         className="contact-title page-heading"
+        style={{ color: "#00b4ff", marginBottom: 12 }}
       >
         {content?.title || "Contact"}
       </motion.h1>

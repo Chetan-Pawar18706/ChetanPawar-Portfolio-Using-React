@@ -42,6 +42,7 @@ export default function Projects() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.1 }}
+          style={{ color: "#00b4ff", marginBottom: 12 }}
         >
           Projects
         </motion.h2>

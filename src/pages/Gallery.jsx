@@ -95,7 +95,7 @@ export default function Gallery() {
 
   return (
     <motion.section className="gallery-container" variants={pageVariants} initial="hidden" animate="visible" exit="hidden">
-      <motion.h2 className="gallery-title page-heading" variants={childVariants}>{section?.title || "Gallery"}</motion.h2>
+      <motion.h2 className="gallery-title page-heading" style={{ color: "#00b4ff", marginBottom: 12 }} variants={childVariants}>{section?.title || "Gallery"}</motion.h2>
 
       <motion.div className="tab-buttons" variants={childVariants}>
         {["personal", "projects", "achievements"].map((type) => (
