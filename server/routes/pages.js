@@ -15,7 +15,7 @@ function hasMongoConnection() {
   return mongoose.connection.readyState === 1;
 }
 
-function normalizeItem(body) {
+function normalizeItem(body, existing = {}) {
   return {
     category: String(body.category || "general").trim().toLowerCase(),
     title: body.title || "",
@@ -30,6 +30,8 @@ function normalizeItem(body) {
           .filter(Boolean),
     order: Number.isFinite(Number(body.order)) ? Number(body.order) : 0,
     published: body.published !== false,
+    agree: body.agree !== undefined ? Number(body.agree) : existing.agree || 0,
+    disagree: body.disagree !== undefined ? Number(body.disagree) : existing.disagree || 0,
   };
 }
 
@@ -88,12 +90,51 @@ router.post(
   })
 );
 
+router.post(
+  "/:slug/:id/vote",
+  validateSlug,
+  asyncHandler(async (req, res) => {
+    if (req.pageSlug !== "blog") {
+      return res.status(404).json({ message: "Voting is only supported for blog items." });
+    }
+
+    const type = String(req.body.type || "").trim().toLowerCase();
+    const previousVote = String(req.body.previousVote || "").trim().toLowerCase();
+
+    if (!["agree", "disagree"].includes(type)) {
+      return res.status(400).json({ message: "Invalid vote type." });
+    }
+
+    const update = {};
+    if (previousVote === type) {
+      update.$inc = { [type]: -1 };
+    } else if (previousVote && ["agree", "disagree"].includes(previousVote)) {
+      update.$inc = { [previousVote]: -1, [type]: 1 };
+    } else {
+      update.$inc = { [type]: 1 };
+    }
+
+    const item = await req.PageModel.findByIdAndUpdate(req.params.id, update, { new: true });
+
+    if (!item) {
+      return res.status(404).json({ message: "Content item not found" });
+    }
+
+    return res.json({ agree: item.agree, disagree: item.disagree });
+  })
+);
+
 router.put(
   "/:slug/:id",
   requireAdmin,
   validateSlug,
   asyncHandler(async (req, res) => {
-    const item = await req.PageModel.findByIdAndUpdate(req.params.id, normalizeItem(req.body), {
+    const existing = await req.PageModel.findById(req.params.id);
+    if (!existing) {
+      return res.status(404).json({ message: "Content item not found" });
+    }
+
+    const item = await req.PageModel.findByIdAndUpdate(req.params.id, normalizeItem(req.body, existing), {
       new: true,
       runValidators: true,
     });

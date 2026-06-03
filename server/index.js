@@ -21,10 +21,14 @@ const distPath = path.join(projectRoot, "dist");
 const hasFrontendBuild = fs.existsSync(path.join(distPath, "index.html"));
 const isProduction = environment === "production";
 
-const allowedOrigins = (process.env.CLIENT_URL || "")
-  .split(",")
-  .map((origin) => origin.trim())
-  .filter(Boolean);
+const defaultLocalOrigins = environment === 'development' ? ["http://localhost:5173"] : [];
+const allowedOrigins = [
+  ...defaultLocalOrigins,
+  ...(process.env.CLIENT_URL || "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean),
+].filter(Boolean);
 
 const loadedRoutes = [
   "GET /",
@@ -39,6 +43,7 @@ const loadedRoutes = [
   "GET /api/pages",
   "GET /api/pages/:slug",
   "POST /api/pages/:slug",
+  "POST /api/pages/:slug/:id/vote",
   "PUT /api/pages/:slug/:id",
   "DELETE /api/pages/:slug/:id",
   "GET /api/messages",

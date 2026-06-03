@@ -92,11 +92,12 @@
 
 .blog-post a {
   color: #00b4ff;
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .blog-post a:hover {
   color: #73d7ff;
+  text-decoration: none;
 }
 
 .post-link-wrap {

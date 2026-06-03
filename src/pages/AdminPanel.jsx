@@ -558,7 +558,7 @@ function PageManager({ activePage, form, setForm, items, isEditing, loading, sta
                 <span>{item.category} {item.published ? "" : "(hidden)"}</span>
                 <h4>{item.title || "Untitled"}</h4>
                 <p>{item.text || item.url || item.items.join(", ")}</p>
-                {(["post", "article"].includes(item.category) || typeof item.agree === "number" || typeof item.disagree === "number") && (
+                {activePage.slug === "blog" && (["post", "article"].includes(item.category) || typeof item.agree === "number" || typeof item.disagree === "number") && (
                   <p className="admin-vote-summary">👍 {item.agree || 0} · 👎 {item.disagree || 0}</p>
                 )}
               </div>

@@ -64,15 +64,21 @@ router.post("/:slug/:id/vote", validateSlug, async (req, res) => {
   }
 
   const type = String(req.body.type || "").trim().toLowerCase();
+  const previousVote = String(req.body.previousVote || "").trim().toLowerCase();
   if (!["agree", "disagree"].includes(type)) {
     return res.status(400).json({ message: "Invalid vote type." });
   }
 
-  const item = await req.PageModel.findByIdAndUpdate(
-    req.params.id,
-    { $inc: { [type]: 1 } },
-    { new: true }
-  );
+  const update = {};
+  if (previousVote === type) {
+    update.$inc = { [type]: -1 };
+  } else if (previousVote && ["agree", "disagree"].includes(previousVote)) {
+    update.$inc = { [previousVote]: -1, [type]: 1 };
+  } else {
+    update.$inc = { [type]: 1 };
+  }
+
+  const item = await req.PageModel.findByIdAndUpdate(req.params.id, update, { new: true });
 
   if (!item) {
     return res.status(404).json({ message: "Content item not found" });

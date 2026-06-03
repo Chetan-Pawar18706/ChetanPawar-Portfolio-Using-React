@@ -7,7 +7,10 @@ export async function loadPageItems(slug) {
 }
 
 export function byCategory(items, category) {
-  return items.filter((item) => item.category === category);
+  const normalizedCategory = String(category || "").trim().toLowerCase();
+  return items.filter(
+    (item) => String(item.category || "").trim().toLowerCase() === normalizedCategory
+  );
 }
 
 export function toContactLinks(items) {

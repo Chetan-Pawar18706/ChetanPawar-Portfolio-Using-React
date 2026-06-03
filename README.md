@@ -1,83 +1,98 @@
 # 💻 Chetan Pawar — Portfolio Website
 
-A personal portfolio built with React.js and Framer Motion showcasing projects, skills and contact options.
+A React portfolio and admin content management project built with Vite, Express, MongoDB, and Framer Motion.
 
-## Admin panel with MongoDB
-
-1. Start MongoDB locally (or use a hosted DB) and set MONGODB_URI in your local `.env`.  
-2. Create the first admin user: `npm run seed:admin` (ensure env vars are set before seeding).  
-3. Start API and frontend together: `npm run dev:full`.  
-4. Admin panel: `http://localhost:5173/admin/login`.
-
-Important: Do NOT commit `.env` or any secret keys to source control. Use local environment files for development and production configuration.
-
-Configure the following values in `.env`, `.env.local`, or `.env.production` as appropriate:
-- `MONGODB_URI`
-- `JWT_SECRET`
-- `ADMIN_EMAIL` / `ADMIN_PASSWORD`
-- `VITE_EMAILJS_SERVICE_ID`, `VITE_EMAILJS_TEMPLATE_ID`, `VITE_EMAILJS_PUBLIC_KEY` (if using EmailJS)
-- `VITE_API_URL` (`http://localhost:5000/api` for local development, `/api` for production builds)
-- `CLIENT_URL` (`http://localhost:5173` for local development, your Render app URL in production)
-
-If any secret was accidentally pushed, rotate/revoke it immediately and remove it from repo history.
-
----
+This repository contains both the frontend UI and a backend API for managing portfolio content, blog posts, admin data, and contact messages.
 
 ## 🚀 Features
 
-- Modern UI/UX with Framer Motion animations  
-- Projects, Resume, and Contact sections  
-- Admin panel for managing content (requires local backend + MongoDB)  
-- Optional EmailJS-powered contact form
+- Responsive portfolio layout with React and CSS
+- Animated UI using Framer Motion
+- Admin panel for content management
+- Blog posts with agree/disagree voting
+- Contact form integration with EmailJS support
+- MongoDB-powered backend API
 
----
+## 🧩 Project structure
 
-## 🛠️ Tech Stack
+- `src/` - React frontend source code
+- `server/` - Express API and server-side routes
+- `public/` - static files served by Vite
+- `assets/` - shared media assets
 
-- Frontend: React.js, JavaScript (ES6+), CSS  
-- Animation: Framer Motion  
-- Backend: Node.js / Express (optional local API)  
-- Database: MongoDB  
-- Deployment: Vercel / Netlify (frontend), recommended host for backend
-
----
-
-## ⚙️ Setup (local)
+## ⚙️ Local setup
 
 ```bash
 # clone
 git clone <repository-url>
 cd Chetan-Portfolio
 
-# install
+# install dependencies
 npm install
+```
 
-# run backend only
-npm run server
+### Run locally
 
-# run frontend only
+```bash
+# frontend only
 npm run dev
 
-# run both together
+# backend only
+npm run server
+
+# frontend + backend together
 npm run dev:full
 ```
 
----
+### Seed data
+
+```bash
+# create admin user
+npm run seed:admin
+
+# seed default page content
+npm run seed:content
+```
+
+## 📄 Available scripts
+
+- `npm run dev` — start Vite frontend
+- `npm run server` — start Express backend
+- `npm run dev:full` — run frontend and backend together
+- `npm run seed:admin` — seed initial admin credentials
+- `npm run seed:content` — seed initial page content
+- `npm run build` — create production frontend build
+- `npm run preview` — preview production build locally
+
+## 🔐 Environment variables
+
+Create a local `.env` file and configure the following values as needed:
+
+- `MONGODB_URI`
+- `JWT_SECRET`
+- `ADMIN_EMAIL`
+- `ADMIN_PASSWORD`
+- `VITE_API_URL` (e.g. `http://localhost:5000/api` for local development)
+- `CLIENT_URL` (e.g. `http://localhost:5173`)
+- `VITE_EMAILJS_SERVICE_ID`
+- `VITE_EMAILJS_TEMPLATE_ID`
+- `VITE_EMAILJS_PUBLIC_KEY`
+
+> Do not commit `.env` files or secret values to source control.
+
+## 🧪 Deployment notes
+
+- Build the frontend with `npm run build`
+- Serve the frontend and backend from appropriate hosting platforms
+- Ensure `VITE_API_URL` points to the deployed backend API
+- Keep secret keys out of version control
 
 ## 📬 Contact
 
-* 📧 Email: chetanpawar8125@gmail.com  
-* 💼 LinkedIn: https://www.linkedin.com/in/chetan-pawarr  
-* 🐙 GitHub: https://github.com/Chetan-Pawar18706
+- Email: `chetanpawar8125@gmail.com`
+- LinkedIn: https://www.linkedin.com/in/chetan-pawarr
+- GitHub: https://github.com/Chetan-Pawar18706
 
----
+## 📜 License
 
-### Security notes
-- Add `.env` to `.gitignore`.  
-- Never paste secret keys into public issues/PRs.  
-- Use long random values for JWT_SECRET and rotate credentials if leaked.
-
----
-
-### License
-MIT — see LICENSE.
+MIT
