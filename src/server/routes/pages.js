@@ -6,7 +6,7 @@ const router = express.Router();
 
 const allowedSlugSet = new Set(allowedSlugs);
 
-function normalizeItem(body, slug) {
+function normalizeItem(body, slug, existing = {}) {
   return {
     category: String(body.category || "general").trim().toLowerCase(),
     title: body.title || "",
@@ -21,6 +21,8 @@ function normalizeItem(body, slug) {
           .filter(Boolean),
     order: Number.isFinite(Number(body.order)) ? Number(body.order) : 0,
     published: body.published !== false,
+    agree: body.agree !== undefined ? Number(body.agree) : existing.agree || 0,
+    disagree: body.disagree !== undefined ? Number(body.disagree) : existing.disagree || 0,
   };
 }
 
@@ -56,16 +58,40 @@ router.post("/:slug", requireAdmin, validateSlug, async (req, res) => {
   res.status(201).json(item);
 });
 
-router.put("/:slug/:id", requireAdmin, validateSlug, async (req, res) => {
+router.post("/:slug/:id/vote", validateSlug, async (req, res) => {
+  if (req.pageSlug !== "blog") {
+    return res.status(404).json({ message: "Voting is only supported for blog items." });
+  }
+
+  const type = String(req.body.type || "").trim().toLowerCase();
+  if (!["agree", "disagree"].includes(type)) {
+    return res.status(400).json({ message: "Invalid vote type." });
+  }
+
   const item = await req.PageModel.findByIdAndUpdate(
     req.params.id,
-    normalizeItem(req.body, req.pageSlug),
-    { new: true, runValidators: true }
+    { $inc: { [type]: 1 } },
+    { new: true }
   );
 
   if (!item) {
     return res.status(404).json({ message: "Content item not found" });
   }
+
+  res.json({ agree: item.agree, disagree: item.disagree });
+});
+
+router.put("/:slug/:id", requireAdmin, validateSlug, async (req, res) => {
+  const existing = await req.PageModel.findById(req.params.id);
+  if (!existing) {
+    return res.status(404).json({ message: "Content item not found" });
+  }
+
+  const item = await req.PageModel.findByIdAndUpdate(
+    req.params.id,
+    normalizeItem(req.body, req.pageSlug, existing),
+    { new: true, runValidators: true }
+  );
 
   res.json(item);
 });

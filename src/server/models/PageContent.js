@@ -40,6 +40,14 @@ const contentSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    agree: {
+      type: Number,
+      default: 0,
+    },
+    disagree: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );

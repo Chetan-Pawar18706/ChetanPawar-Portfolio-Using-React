@@ -71,6 +71,8 @@ export default function Gallery() {
     id: project._id,
     caption: project.desc || project.title,
     photos: [buildAssetUrl(project.image)].filter(Boolean),
+    link: project.live || project.code || "#",
+    isProject: true,
   }));
   const images = {
     ...(remoteImages || { personal: [], projects: [], achievements: [] }),
@@ -116,6 +118,18 @@ export default function Gallery() {
           {(images[tab] || []).map((post) => (
             <motion.div key={post.id} className="post-card" variants={childVariants} whileHover={{ y: -4 }}>
               <p className="caption">{post.caption}</p>
+              {post.isProject && post.link && (
+                <motion.a
+                  href={post.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="view-project-btn"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  View Project
+                </motion.a>
+              )}
               <div className={`photo-grid ${post.photos.length > 1 ? "multi" : "single"}`}>
                 {post.photos.map((src, i) => (
                   <motion.div key={i} className="photo-item" whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 250 }} onClick={() => openZoom(post, i)}>

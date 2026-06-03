@@ -100,6 +100,7 @@
 
 .admin-form input,
 .admin-form textarea,
+.admin-form select,
 .admin-login-card input {
   width: 100%;
   border: 1px solid rgba(148, 163, 184, 0.22);
@@ -108,6 +109,15 @@
   border-radius: 8px;
   padding: 11px 12px;
   font: inherit;
+}
+
+.admin-form select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #38bdf8 50%), linear-gradient(135deg, #38bdf8 50%, transparent 50%);
+  background-position: calc(100% - 18px) calc(50% - 6px), calc(100% - 12px) calc(50% - 6px);
+  background-size: 8px 8px, 8px 8px;
+  background-repeat: no-repeat;
 }
 
 .admin-file input[type="file"] {
@@ -233,6 +243,12 @@
   margin: 0;
   overflow: hidden;
   -webkit-box-orient: vertical;
+}
+
+.admin-vote-summary {
+  margin: 8px 0 0;
+  color: #7dd3fc;
+  font-size: 13px;
 }
 
 .admin-project img {

@@ -16,7 +16,7 @@ const blankProject = {
 };
 
 const blankPageItem = {
-  category: "general",
+  category: "",
   title: "",
   text: "",
   image: "",
@@ -30,7 +30,7 @@ const pages = [
   { slug: "home", label: "Home", categories: "section, hero, profession, info, links-title", hiddenCategories: ["link"] },
   { slug: "gallery", label: "Gallery", categories: "section, personal, achievements", hiddenCategories: ["projects"] },
   { slug: "projects", label: "Projects", special: "projects" },
-  { slug: "blog", label: "Blog", categories: "section, post" },
+  { slug: "blog", label: "Blog", categories: "section, post, article" },
   { slug: "skills", label: "Skills", categories: "section, skill, group" },
   { slug: "certificates", label: "Certificates", categories: "section, tech, other" },
   { slug: "resume", label: "Resume", categories: "section, profile, summary, education, experience, skill, pdf", hiddenCategories: ["link", "project"] },
@@ -352,6 +352,95 @@ export default function AdminPanel() {
   );
 }
 
+const defaultPageFormConfig = {
+  showUrl: true,
+  showUploadFile: true,
+  showImage: true,
+  showItems: true,
+  categoryPlaceholder: "",
+  titlePlaceholder: "Heading, skill name, link label...",
+  textPlaceholder: "Paragraph, caption, description...",
+  imagePlaceholder: "https://... or /image.png",
+  itemsPlaceholder: "Comma separated list, gallery images, skills, lines...",
+  itemsLabel: "Items",
+};
+
+const pageFormConfig = {
+  default: defaultPageFormConfig,
+  home: {
+    ...defaultPageFormConfig,
+    titlePlaceholder: "Section title or hero heading",
+    textPlaceholder: "Section text, hero subtitle, or description...",
+    itemsPlaceholder: "Comma separated link labels, bullets, or content items",
+  },
+  gallery: {
+    ...defaultPageFormConfig,
+    showUrl: false,
+    showUploadFile: false,
+    categoryPlaceholder: "section, personal, achievements",
+    titlePlaceholder: "Gallery title or caption",
+    textPlaceholder: "Caption or description...",
+    imagePlaceholder: "Single cover image or leave blank when using gallery items",
+    itemsPlaceholder: "Comma separated image URLs for gallery photos",
+    itemsLabel: "Gallery Items",
+  },
+  blog: {
+    ...defaultPageFormConfig,
+    categoryPlaceholder: "section, post, article",
+    showItems: false,
+    titlePlaceholder: "Blog post or article title",
+    textPlaceholder: "Blog post summary, article content, or excerpt...",
+    imagePlaceholder: "Feature image URL",
+    itemsPlaceholder: "",
+  },
+  skills: {
+    ...defaultPageFormConfig,
+    showUrl: false,
+    showUploadFile: false,
+    showImage: true,
+    titlePlaceholder: "Skill or group heading",
+    textPlaceholder: "Optional description for this skill group...",
+    imagePlaceholder: "https://... or /image.png",
+    itemsPlaceholder: "Comma separated skills",
+  },
+  certificates: {
+    ...defaultPageFormConfig,
+    showUploadFile: false,
+    showItems: false,
+    titlePlaceholder: "Certificate title",
+    textPlaceholder: "Issuer, year, and description...",
+    imagePlaceholder: "Certificate image URL",
+    itemsPlaceholder: "",
+  },
+  resume: {
+    ...defaultPageFormConfig,
+    titlePlaceholder: "Section or role title",
+    textPlaceholder: "Profile, summary, education, or experience details...",
+    imagePlaceholder: "Optional image or logo URL",
+    itemsPlaceholder: "Comma separated list items or details",
+    itemsLabel: "Details",
+  },
+  about: {
+    ...defaultPageFormConfig,
+    showUrl: false,
+    showUploadFile: false,
+    titlePlaceholder: "Section title",
+    textPlaceholder: "Paragraph, caption, or description...",
+    imagePlaceholder: "Optional image URL",
+    itemsPlaceholder: "Comma separated list items or education entries",
+  },
+  contact: {
+    ...defaultPageFormConfig,
+    showUploadFile: false,
+    showImage: false,
+    showItems: false,
+    titlePlaceholder: "Contact title or link label",
+    textPlaceholder: "Contact text, address, or caption...",
+    imagePlaceholder: "",
+    itemsPlaceholder: "",
+  },
+};
+
 function ProjectManager({ form, setForm, projects, isEditing, loading, status, onSubmit, onEdit, onDelete, onCancel, onUploadImage }) {
   const update = (name, value) => setForm((current) => ({ ...current, [name]: value }));
 
@@ -390,6 +479,27 @@ function ProjectManager({ form, setForm, projects, isEditing, loading, status, o
 
 function PageManager({ activePage, form, setForm, items, isEditing, loading, status, onSubmit, onEdit, onDelete, onCancel, onUploadImage, onUploadFile }) {
   const update = (name, value) => setForm((current) => ({ ...current, [name]: value }));
+  const config = pageFormConfig[activePage.slug] || pageFormConfig.default;
+  const showUrlField = config.showUrl;
+  const showUploadFile = config.showUploadFile;
+  const showImageField = config.showImage;
+  const showItemsField = config.showItems;
+  const categoryPlaceholder = config.categoryPlaceholder;
+  const titlePlaceholder = config.titlePlaceholder;
+  const textPlaceholder = config.textPlaceholder;
+  const imagePlaceholder = config.imagePlaceholder;
+  const itemsPlaceholder = config.itemsPlaceholder;
+  const itemsLabel = config.itemsLabel || "Items";
+  const categoryOptions = Array.from(
+    new Set([
+      "general",
+      ...String(activePage.categories || "")
+        .split(",")
+        .map((category) => category.trim())
+        .filter(Boolean),
+      form.category,
+    ])
+  );
 
   return (
     <div className="admin-grid">
@@ -397,18 +507,40 @@ function PageManager({ activePage, form, setForm, items, isEditing, loading, sta
         <h3>{isEditing ? `Edit ${activePage.label}` : `Add ${activePage.label} Content`}</h3>
         <p className="admin-muted">Suggested categories: {activePage.categories}</p>
         <div className="admin-row">
-          <label>Category<input value={form.category} onChange={(event) => update("category", event.target.value)} required /></label>
+          <label>
+            Category
+            {categoryOptions.length > 0 ? (
+              <select value={form.category} onChange={(event) => update("category", event.target.value)} required>
+                <option value="" disabled>{categoryPlaceholder || "Select a category"}</option>
+                {categoryOptions.map((option) => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+            ) : (
+              <input value={form.category} onChange={(event) => update("category", event.target.value)} placeholder={categoryPlaceholder} required />
+            )}
+          </label>
           <label>Sort Order<input type="number" value={form.order} onChange={(event) => update("order", event.target.value)} /></label>
         </div>
-        <label>Title<input value={form.title} onChange={(event) => update("title", event.target.value)} placeholder="Heading, skill name, link label..." /></label>
-        <label>Text<textarea value={form.text} onChange={(event) => update("text", event.target.value)} rows="5" placeholder="Paragraph, caption, description..." /></label>
-        <label>Image URL<input value={form.image} onChange={(event) => update("image", event.target.value)} placeholder="https://... or /image.png" /></label>
-        <label className="admin-file">Upload image<input type="file" accept="image/*" onChange={onUploadImage} /></label>
-        <label>Link URL<input value={form.url} onChange={(event) => update("url", event.target.value)} placeholder="https://..., mailto:..., /resume.pdf" /></label>
-        <label className="admin-file">Upload PDF (optional)
-          <input type="file" accept="application/pdf" onChange={onUploadFile} />
-        </label>
-        <label>Items<input value={form.items} onChange={(event) => update("items", event.target.value)} placeholder="Comma separated list, gallery images, skills, lines..." /></label>
+        <label>Title<input value={form.title} onChange={(event) => update("title", event.target.value)} placeholder={titlePlaceholder} /></label>
+        <label>Text<textarea value={form.text} onChange={(event) => update("text", event.target.value)} rows="5" placeholder={textPlaceholder} /></label>
+        {showImageField && (
+          <>
+            <label>Image URL<input value={form.image} onChange={(event) => update("image", event.target.value)} placeholder={imagePlaceholder} /></label>
+            <label className="admin-file">Upload image<input type="file" accept="image/*" onChange={onUploadImage} /></label>
+          </>
+        )}
+        {showUrlField && (
+          <>
+            <label>Link URL<input value={form.url} onChange={(event) => update("url", event.target.value)} placeholder="https://..., mailto:..., /resume.pdf" /></label>
+            <label className="admin-file">Upload PDF (optional)
+              <input type="file" accept="application/pdf" onChange={onUploadFile} />
+            </label>
+          </>
+        )}
+        {showItemsField && (
+          <label>{itemsLabel}<input value={form.items} onChange={(event) => update("items", event.target.value)} placeholder={itemsPlaceholder} /></label>
+        )}
         <label className="admin-check"><input type="checkbox" checked={form.published} onChange={(event) => update("published", event.target.checked)} /> Published</label>
         <FormActions isEditing={isEditing} loading={loading} onCancel={onCancel} />
         {status && <div className="admin-status">{status}</div>}
@@ -426,6 +558,9 @@ function PageManager({ activePage, form, setForm, items, isEditing, loading, sta
                 <span>{item.category} {item.published ? "" : "(hidden)"}</span>
                 <h4>{item.title || "Untitled"}</h4>
                 <p>{item.text || item.url || item.items.join(", ")}</p>
+                {(["post", "article"].includes(item.category) || typeof item.agree === "number" || typeof item.disagree === "number") && (
+                  <p className="admin-vote-summary">👍 {item.agree || 0} · 👎 {item.disagree || 0}</p>
+                )}
               </div>
               <button className="admin-secondary" type="button" onClick={() => onEdit(item)}>Edit</button>
               <button className="admin-danger" type="button" onClick={() => onDelete(item._id)}><Trash2 size={16} /></button>
