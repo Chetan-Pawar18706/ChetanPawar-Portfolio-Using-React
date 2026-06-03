@@ -5,6 +5,14 @@ node_modules/
 dist/
 build/
 .vite/
+.cache/
+
+# hosting/runtime local artifacts
+.render/
+.vercel/
+.netlify/
+.tmp/
+.tmp/*
 
 # local env files
 .env
@@ -32,3 +40,6 @@ coverage/
 # other
 .env.test
 *.tgz
+server-test.err.log
+server-test.out.log
+vote-debug.js
