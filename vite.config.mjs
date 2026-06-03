@@ -6,8 +6,9 @@ export default defineConfig({
   plugins: [react()],
   base: './', // 👈 this fixes the blank page on deployment
   server: {
+    host: '0.0.0.0',
     port: 5173,
-    strictPort: true,
+    strictPort: false,
     proxy: {
       '/api': {
         target: 'http://localhost:5000',
