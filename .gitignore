@@ -43,3 +43,16 @@ coverage/
 server-test.err.log
 server-test.out.log
 vote-debug.js
+
+# secrets and credentials
+.env*
+secrets
+secrets/
+*.key
+*.pem
+*.p12
+*.jks
+credentials.json
+.aws/
+.gcloud/
+.vault/
