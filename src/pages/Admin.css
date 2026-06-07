@@ -111,6 +111,34 @@
   font: inherit;
 }
 
+.password-field {
+  position: relative;
+}
+
+.password-field input {
+  padding-right: 40px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #9aa0a6;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  cursor: pointer;
+}
+
+.password-toggle:focus {
+  outline: 2px solid rgba(14, 165, 233, 0.2);
+  border-radius: 6px;
+}
+
 .admin-form select {
   appearance: none;
   -webkit-appearance: none;
