@@ -22,9 +22,10 @@ function slugify(value) {
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, assetsDir),
   filename: (req, file, cb) => {
-    const timestamp = Date.now();
-    const safeName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, "_");
-    cb(null, `${safeName}`);
+    const ext = path.extname(file.originalname);
+    const baseName = path.basename(file.originalname, ext);
+    const safeName = baseName.replace(/[^a-zA-Z0-9._-]/g, "_");
+    cb(null, `${safeName}${ext}`);
   },
 });
 
@@ -43,6 +44,7 @@ router.post("/", requireAdmin, upload.single("file"), (req, res) => {
   let finalFilename = req.file.filename;
   const title = String(req.body.title || "").trim();
 
+  // If title provided, rename file to clean title-based name
   if (title) {
     const slugifiedTitle = slugify(title);
     if (slugifiedTitle) {
@@ -52,6 +54,10 @@ router.post("/", requireAdmin, upload.single("file"), (req, res) => {
       const newPath = path.join(assetsDir, newFilename);
 
       try {
+        // Check if target file already exists
+        if (fs.existsSync(newPath)) {
+          fs.unlinkSync(newPath);
+        }
         fs.renameSync(oldPath, newPath);
         finalFilename = newFilename;
       } catch (err) {
