@@ -47,8 +47,7 @@ router.post("/", requireAdmin, upload.single("file"), (req, res) => {
     const slugifiedTitle = slugify(title);
     if (slugifiedTitle) {
       const extension = path.extname(req.file.originalname);
-      const timestamp = Date.now();
-      const newFilename = `${timestamp}-${slugifiedTitle}${extension}`;
+      const newFilename = `${slugifiedTitle}${extension}`;
       const oldPath = req.file.path;
       const newPath = path.join(assetsDir, newFilename);
 
