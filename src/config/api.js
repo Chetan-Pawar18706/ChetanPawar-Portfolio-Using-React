@@ -55,12 +55,21 @@ function normalizePublicUrl(source) {
 
 export const API_URL = normalizeApiUrl(import.meta.env.VITE_API_URL);
 
+export const ASSETS_BASE_URL = String(import.meta.env.VITE_PUBLIC_ASSETS_URL || "").trim().replace(/\/+$/, "");
+
 export function buildApiUrl(path) {
   return `${API_URL}${normalizeRelativePath(path)}`;
 }
 
 export function buildAssetUrl(source) {
-  return normalizePublicUrl(source);
+  const assetPath = normalizePublicUrl(source);
+  
+  // If asset path is relative (starts with /) and ASSETS_BASE_URL is set, prepend it
+  if (ASSETS_BASE_URL && assetPath.startsWith("/")) {
+    return `${ASSETS_BASE_URL}${assetPath}`;
+  }
+  
+  return assetPath;
 }
 
 export function buildPublicUrl(source) {
