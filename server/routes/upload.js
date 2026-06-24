@@ -23,10 +23,8 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, assetsDir),
   filename: (req, file, cb) => {
     const timestamp = Date.now();
-    const title = slugify(req.body.title || req.body.name || "asset");
-    const extension = path.extname(file.originalname) || ".bin";
-    const fileName = `${timestamp}-${title || "asset"}${extension}`;
-    cb(null, fileName);
+    const safeName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, "_");
+    cb(null, `${safeName}`);
   },
 });
 
@@ -42,7 +40,28 @@ router.post("/", requireAdmin, upload.single("file"), (req, res) => {
     return res.status(400).json({ message: "No file uploaded." });
   }
 
-  const fileUrl = `/assets/${req.file.filename}`;
+  let finalFilename = req.file.filename;
+  const title = String(req.body.title || "").trim();
+
+  if (title) {
+    const slugifiedTitle = slugify(title);
+    if (slugifiedTitle) {
+      const extension = path.extname(req.file.originalname);
+      const timestamp = Date.now();
+      const newFilename = `${timestamp}-${slugifiedTitle}${extension}`;
+      const oldPath = req.file.path;
+      const newPath = path.join(assetsDir, newFilename);
+
+      try {
+        fs.renameSync(oldPath, newPath);
+        finalFilename = newFilename;
+      } catch (err) {
+        console.error("File rename failed:", err);
+      }
+    }
+  }
+
+  const fileUrl = `/assets/${finalFilename}`;
   return res.status(201).json({
     url: fileUrl,
     name: req.file.originalname,
