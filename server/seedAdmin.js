@@ -7,8 +7,13 @@ const Admin = require("./models/Admin");
 async function seedAdmin() {
   await connectDB();
 
-  const email = (process.env.ADMIN_EMAIL || "admin@portfolio.com").toLowerCase();
-  const password = process.env.ADMIN_PASSWORD || "admin123";
+  const email = process.env.ADMIN_EMAIL && process.env.ADMIN_EMAIL.toLowerCase();
+  const password = process.env.ADMIN_PASSWORD;
+
+  if (!email || !password) {
+    console.error("ADMIN_EMAIL and ADMIN_PASSWORD must be set in environment variables.");
+    process.exit(1);
+  }
   const existing = await Admin.findOne({ email });
 
   if (existing) {

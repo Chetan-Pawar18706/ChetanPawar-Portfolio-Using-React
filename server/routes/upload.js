@@ -8,12 +8,25 @@ const router = express.Router();
 const assetsDir = path.join(__dirname, "..", "assets");
 fs.mkdirSync(assetsDir, { recursive: true });
 
+function slugify(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 120);
+}
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, assetsDir),
   filename: (req, file, cb) => {
     const timestamp = Date.now();
-    const safeName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, "_");
-    cb(null, `${timestamp}-${safeName}`);
+    const title = slugify(req.body.title || req.body.name || "asset");
+    const extension = path.extname(file.originalname) || ".bin";
+    const fileName = `${timestamp}-${title || "asset"}${extension}`;
+    cb(null, fileName);
   },
 });
 

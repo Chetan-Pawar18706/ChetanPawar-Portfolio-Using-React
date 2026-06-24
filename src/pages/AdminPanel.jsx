@@ -175,9 +175,12 @@ export default function AdminPanel() {
     }
   }
 
-  async function uploadAsset(file) {
+  async function uploadAsset(file, title) {
     const formData = new FormData();
     formData.append("file", file);
+    if (title) {
+      formData.append("title", title);
+    }
     const data = await apiFetch("/upload", { method: "POST", body: formData });
     return data.url;
   }
@@ -190,7 +193,7 @@ export default function AdminPanel() {
     setStatus("");
 
     try {
-      const url = await uploadAsset(file);
+      const url = await uploadAsset(file, projectForm.title || file.name);
       setProjectForm((current) => ({ ...current, image: url }));
       setStatus("Project image uploaded.");
     } catch (error) {
@@ -209,7 +212,7 @@ export default function AdminPanel() {
     setStatus("");
 
     try {
-      const url = await uploadAsset(file);
+      const url = await uploadAsset(file, pageForm.title || file.name);
       setPageForm((current) => ({ ...current, image: url }));
       setStatus("Image uploaded.");
     } catch (error) {
@@ -228,7 +231,7 @@ export default function AdminPanel() {
     setStatus("");
 
     try {
-      const url = await uploadAsset(file);
+      const url = await uploadAsset(file, pageForm.title || file.name);
       setPageForm((current) => ({ ...current, url }));
       setStatus("File URL uploaded.");
     } catch (error) {
